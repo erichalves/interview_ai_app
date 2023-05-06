@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/screens/free_submissions_text.dart';
 
 class Scene extends StatelessWidget {
   @override
@@ -166,18 +167,7 @@ class Scene extends StatelessWidget {
                             child: SizedBox(
                               width: 175*fem,
                               height: 24*fem,
-                              child: Text(
-                                'Free submissions: 3/3',
-                                style: SafeGoogleFont (
-                                  'Roboto',
-                                  fontSize: 16*ffem,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.5*ffem/fem,
-                                  letterSpacing: 0.8*fem,
-                                  color: Color(0xff516177),
-                                ),
-                              ),
-                            ),
+                              child: FreeSubmissionText(fem: fem, ffem: ffem),
                           ),
                         ),
                         Positioned(
