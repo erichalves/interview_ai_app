@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/screens/free_submissions_text.dart';
+import 'package:myapp/functions/audio_recorder.dart';
 
 class Scene extends StatelessWidget {
   @override
