@@ -48,6 +48,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
+        //TODO: replace home with routes and initialRoute
+        //https://docs.flutter.dev/ui/navigation#using-named-routes
         body: SingleChildScrollView(
           child: Scene(),
         ),

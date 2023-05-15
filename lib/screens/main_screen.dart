@@ -6,7 +6,26 @@ import 'package:myapp/utils.dart';
 import 'package:myapp/screens/free_submissions_text.dart';
 import 'package:myapp/functions/audio_recorder.dart';
 
-class Scene extends StatelessWidget {
+class Scene extends StatefulWidget {
+  @override
+  _Scene createState() => _Scene();
+}
+
+class _Scene extends State<Scene> {
+  int _count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _incrementSubmissionCounter() {
+    setState(() {
+      //TODO: update a database
+      _count = _count + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = MediaQuery.of(context).size.width;
@@ -172,7 +191,11 @@ class Scene extends StatelessWidget {
                           // left: 0 * fem,
                           // top: 10 * fem,
                           alignment: Alignment.centerLeft,
-                          child: FreeSubmissionText(fem: fem, ffem: ffem),
+                          child: FreeSubmissionsText(
+                            countFreeSubmissions: _count,
+                            fem: fem,
+                            ffem: ffem,
+                          ),
                           // Align(
                           //   child: SizedBox(
                           //     width: 175 * fem,
