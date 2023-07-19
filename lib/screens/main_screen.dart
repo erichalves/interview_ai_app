@@ -12,7 +12,7 @@ class Scene extends StatefulWidget {
 }
 
 class _Scene extends State<Scene> {
-  int _count = 0;
+  int _countFreeSubmissions = 0;
 
   @override
   void initState() {
@@ -22,7 +22,7 @@ class _Scene extends State<Scene> {
   void _incrementSubmissionCounter() {
     setState(() {
       //TODO: update a database
-      _count = _count + 1;
+      _countFreeSubmissions = _countFreeSubmissions + 1;
     });
   }
 
@@ -191,10 +191,16 @@ class _Scene extends State<Scene> {
                           // left: 0 * fem,
                           // top: 10 * fem,
                           alignment: Alignment.centerLeft,
-                          child: FreeSubmissionsText(
-                            countFreeSubmissions: _count,
-                            fem: fem,
-                            ffem: ffem,
+                          child: Text(
+                            'Free submissions: ${_countFreeSubmissions}/3',
+                            style: SafeGoogleFont(
+                              'Roboto',
+                              fontSize: 16 * ffem,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5 * ffem / fem,
+                              letterSpacing: 0.8 * fem,
+                              color: Color(0xff516177),
+                            ),
                           ),
                           // Align(
                           //   child: SizedBox(
@@ -348,18 +354,28 @@ class _Scene extends State<Scene> {
                                               ],
                                             ),
                                           ),
-                                          Container(
-                                            // caretdownuRu (I51:293;51:266)
-                                            margin: EdgeInsets.fromLTRB(0 * fem,
-                                                2 * fem, 0 * fem, 0 * fem),
-                                            width: 22 * fem,
-                                            height: 12 * fem,
-                                            child: Image.asset(
-                                              'REPLACE_IMAGE:I51:293;51:266',
+                                          TextButton(
+                                            // questiontextygf (51:294)
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              padding: EdgeInsets.zero,
+                                            ),
+                                            child: Container(
+                                              // caretdownuRu (I51:293;51:266)
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0 * fem,
+                                                  2 * fem,
+                                                  0 * fem,
+                                                  0 * fem),
                                               width: 22 * fem,
                                               height: 12 * fem,
+                                              child: Image.asset(
+                                                'assets/screens/images/caretdown-Juq.png',
+                                                width: 22 * fem,
+                                                height: 12 * fem,
+                                              ),
                                             ),
-                                          ),
+                                          )
                                         ],
                                       ),
                                     ),
