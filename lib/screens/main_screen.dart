@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:ui';
+import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/screens/recording_widget.dart';
 import 'package:myapp/screens/free_submissions_text.dart';
 import 'package:myapp/functions/audio_recorder.dart';
 
@@ -11,12 +13,148 @@ class Scene extends StatefulWidget {
   _Scene createState() => _Scene();
 }
 
+enum RecordingState { standBy, recording, completed }
+
 class _Scene extends State<Scene> {
   int _countFreeSubmissions = 0;
+  RecordingState _recordingState = RecordingState.standBy;
+  final RecordingManager _recordingManager = RecordingManager();
+  final int _recommendedTime = 3 * 60; //time in seconds
+  final int _maxTime = 5 * 60;
+  late Timer _timer;
+  int _timerCount = 0;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_timerCount > _maxTime) {
+        timer.cancel();
+        _recordingManager.stopRecording();
+        setState(() {
+          _recordingState = RecordingState.completed;
+        });
+      } else {
+        setState(() {
+          _timerCount++;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Widget recordingButtons(
+      double fem,
+      double ffem,
+      RecordingState recordingState,
+      RecordingManager recordingManager,
+      int timer) {
+    if (recordingState == RecordingState.standBy) {
+      return TextButton(
+        onPressed: recordingManager.startRecording,
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+        ),
+        child: Container(
+          padding:
+              EdgeInsets.fromLTRB(28.5 * fem, 16 * fem, 4.5 * fem, 16 * fem),
+          width: double.infinity,
+          height: 56 * fem,
+          decoration: BoxDecoration(
+            color: Color(0xfff8f8f8), //Color(0xff3a64f6),
+            border: Border.all(color: Color(0xff3a64f6), width: 1),
+            borderRadius: BorderRadius.circular(32 * fem),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                // microphoneWP5 (I51:296;50:889)
+                margin:
+                    EdgeInsets.fromLTRB(0 * fem, 0 * fem, 12.5 * fem, 0 * fem),
+                width: 15 * fem,
+                height: 21 * fem,
+                child: Image.asset(
+                  'assets/screens/images/microphone.png',
+                  width: 15 * fem,
+                  height: 21 * fem,
+                ),
+              ),
+              Container(
+                // autogroupxhbhPhm (R57Sp5NtWUEVRBWjCNXHBh)
+                width: 135.5 * fem,
+                height: double.infinity,
+                child: Text(
+                  'Start recording',
+                  style: SafeGoogleFont(
+                    'Roboto',
+                    fontSize: 18 * ffem,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3333333333 * ffem / fem,
+                    letterSpacing: 0.54 * fem,
+                    color: Color(0xff3a64f6),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (recordingState == RecordingState.recording) {
+      return TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+        ),
+        child: Container(
+          padding:
+              EdgeInsets.fromLTRB(27.75 * fem, 16 * fem, 14 * fem, 16 * fem),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Color(0xff3154cd),
+            borderRadius: BorderRadius.circular(32 * fem),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                // pausexjd (I68:98;50:898)
+                margin:
+                    EdgeInsets.fromLTRB(0 * fem, 0 * fem, 11.75 * fem, 0 * fem),
+                width: 16.5 * fem,
+                height: 18 * fem,
+                child: Image.asset(
+                  'assets/screens/images/pause.png',
+                  width: 16.5 * fem,
+                  height: 18 * fem,
+                ),
+              ),
+              Text(
+                // buttonRdD (I68:98;50:899)
+                '${formatTime(_timerCount)} / 5:00',
+                style: SafeGoogleFont(
+                  'Roboto',
+                  fontSize: 18 * ffem,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3333333333 * ffem / fem,
+                  letterSpacing: 0.54 * fem,
+                  color: Color(0xfff8f8f8),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (recordingState == RecordingState.completed) {}
+    throw Exception("State not defined");
   }
 
   void _incrementSubmissionCounter() {
@@ -474,64 +612,10 @@ class _Scene extends State<Scene> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                // largebuttonuu5 (51:296)
-                                margin: EdgeInsets.fromLTRB(
-                                    17.5 * fem, 0 * fem, 16.5 * fem, 8 * fem),
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(28.5 * fem,
-                                        16 * fem, 4.5 * fem, 16 * fem),
-                                    width: double.infinity,
-                                    height: 56 * fem,
-                                    decoration: BoxDecoration(
-                                      color: Color(
-                                          0xfff8f8f8), //Color(0xff3a64f6),
-                                      border: Border.all(
-                                          color: Color(0xff3a64f6), width: 1),
-                                      borderRadius:
-                                          BorderRadius.circular(32 * fem),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          // microphoneWP5 (I51:296;50:889)
-                                          margin: EdgeInsets.fromLTRB(0 * fem,
-                                              0 * fem, 12.5 * fem, 0 * fem),
-                                          width: 15 * fem,
-                                          height: 21 * fem,
-                                          child: Image.asset(
-                                            'assets/screens/images/microphone.png',
-                                            width: 15 * fem,
-                                            height: 21 * fem,
-                                          ),
-                                        ),
-                                        Container(
-                                          // autogroupxhbhPhm (R57Sp5NtWUEVRBWjCNXHBh)
-                                          width: 135.5 * fem,
-                                          height: double.infinity,
-                                          child: Text(
-                                            'Start recording',
-                                            style: SafeGoogleFont(
-                                              'Roboto',
-                                              fontSize: 18 * ffem,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.3333333333 * ffem / fem,
-                                              letterSpacing: 0.54 * fem,
-                                              color: Color(0xff3a64f6),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                                  // largebuttonuu5 (51:296)
+                                  margin: EdgeInsets.fromLTRB(
+                                      17.5 * fem, 0 * fem, 16.5 * fem, 8 * fem),
+                                  child: recordingButtons()),
                               Container(
                                 // frame1TBq (51:297)
                                 padding: EdgeInsets.fromLTRB(

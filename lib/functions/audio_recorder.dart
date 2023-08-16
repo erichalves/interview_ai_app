@@ -1,34 +1,50 @@
-import 'package:permission_handler/permission_handler.dart';
-
+import 'dart:io';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path_provider/path_provider.dart';
 
-class AudioRecorder {
-  FlutterSoundRecorder? _audioRecorder;
-  final String _path = 'file.mp4';
+class RecordingManager {
+  late FlutterSoundRecorder _recorder;
+  String _path = '';
 
-  // Initialize the audio recorder
-  Future<void> init() async {
-    _audioRecorder = FlutterSoundRecorder();
-    final status = await Permission.microphone.request();
-    if (status != PermissionStatus.granted) {
-      throw 'Microphone permission denied';
-    }
-    await _audioRecorder!.openRecorder();
+  RecordingManager() {
+    _recorder = FlutterSoundRecorder();
   }
 
-  // Start recording
+  Future<void> _initializeRecorder() async {
+    await _recorder.openRecorder();
+  }
+
+  Future<String> _getTemporaryPath() async {
+    Directory tempDir = await getTemporaryDirectory();
+    return '${tempDir.path}/recording.mp3';
+  }
+
   Future<void> startRecording() async {
-    await _audioRecorder!.startRecorder(toFile: _path);
+    await _initializeRecorder();
+    _path = await _getTemporaryPath();
+    await _recorder.startRecorder(toFile: _path, codec: Codec.mp3);
   }
 
-  // Stop recording
   Future<void> stopRecording() async {
-    await _audioRecorder!.stopRecorder();
+    await _recorder.stopRecorder();
+    await _recorder.closeRecorder();
   }
 
-  // Dispose the audio recorder
-  Future<void> dispose() async {
-    await _audioRecorder!.closeRecorder();
-    _audioRecorder = null;
+  Future<void> deleteRecording() async {
+    if (_path.length == 0) {
+      throw Exception("No recording found to delete.");
+    }
+    File file = File(_path);
+    if (await file.exists()) {
+      await file.delete();
+    }
+    _path = '';
+  }
+
+  File getRecording() {
+    if (_path == null) {
+      throw Exception("No recording found.");
+    }
+    return File(_path);
   }
 }

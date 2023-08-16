@@ -80,3 +80,13 @@ TextStyle SafeGoogleFont(
     );
   }
 }
+
+String formatTime(int seconds) {
+  final int minute = seconds ~/ 60;
+  final int second = seconds % 60;
+
+  final String minuteStr = minute.toString().padLeft(2, '0');
+  final String secondStr = second.toString().padLeft(2, '0');
+
+  return '$minuteStr:$secondStr';
+}
