@@ -26,6 +26,8 @@ class _Scene extends State<Scene> {
     });
   }
 
+  void _openNewPositionScreen() {}
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = MediaQuery.of(context).size.width;
@@ -60,83 +62,83 @@ class _Scene extends State<Scene> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    // frame1W8K (51:306)
-                    margin: EdgeInsets.fromLTRB(
-                        15 * fem, 0 * fem, 18 * fem, 28 * fem),
-                    width: double.infinity,
-                    height: 22 * fem,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          // jmm (51:307)
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(
-                                0 * fem, 0 * fem, 237 * fem, 0 * fem),
-                            child: Text(
-                              '9:30',
-                              textAlign: TextAlign.center,
-                              style: SafeGoogleFont(
-                                'Source Sans Pro',
-                                fontSize: 14 * ffem,
-                                fontWeight: FontWeight.w700,
-                                height: 1.5714285714 * ffem / fem,
-                                color: Color(0xff171d25),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          // frame1hkX (51:308)
-                          margin: EdgeInsets.fromLTRB(
-                              0 * fem, 3 * fem, 0 * fem, 3 * fem),
-                          height: double.infinity,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // cellsignalnoneaZR (51:309)
-                                width: 16 * fem,
-                                height: 16 * fem,
-                                child: Image.asset(
-                                  'REPLACE_IMAGE:51:309',
-                                  width: 16 * fem,
-                                  height: 16 * fem,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4 * fem,
-                              ),
-                              Container(
-                                // wifihigh2AX (51:312)
-                                width: 16 * fem,
-                                height: 16 * fem,
-                                child: Image.asset(
-                                  'REPLACE_IMAGE:51:312',
-                                  width: 16 * fem,
-                                  height: 16 * fem,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4 * fem,
-                              ),
-                              Container(
-                                // batteryemptysS3 (51:318)
-                                width: 16 * fem,
-                                height: 16 * fem,
-                                child: Image.asset(
-                                  'REPLACE_IMAGE:51:318',
-                                  width: 16 * fem,
-                                  height: 16 * fem,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   // frame1W8K (51:306)
+                  //   margin: EdgeInsets.fromLTRB(
+                  //       15 * fem, 0 * fem, 18 * fem, 28 * fem),
+                  //   width: double.infinity,
+                  //   height: 22 * fem,
+                  //   child: Row(
+                  //     crossAxisAlignment: CrossAxisAlignment.center,
+                  //     children: [
+                  //       // Center(
+                  //       //   // jmm (51:307)
+                  //       //   child: Container(
+                  //       //     margin: EdgeInsets.fromLTRB(
+                  //       //         0 * fem, 0 * fem, 237 * fem, 0 * fem),
+                  //       //     child: Text(
+                  //       //       '9:30',
+                  //       //       textAlign: TextAlign.center,
+                  //       //       style: SafeGoogleFont(
+                  //       //         'Source Sans Pro',
+                  //       //         fontSize: 14 * ffem,
+                  //       //         fontWeight: FontWeight.w700,
+                  //       //         height: 1.5714285714 * ffem / fem,
+                  //       //         color: Color(0xff171d25),
+                  //       //       ),
+                  //       //     ),
+                  //       //   ),
+                  //       // ),
+                  //       Container(
+                  //         // frame1hkX (51:308)
+                  //         margin: EdgeInsets.fromLTRB(
+                  //             0 * fem, 3 * fem, 0 * fem, 3 * fem),
+                  //         height: double.infinity,
+                  //         child: Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //           children: [
+                  //             Container(
+                  //               // cellsignalnoneaZR (51:309)
+                  //               width: 16 * fem,
+                  //               height: 16 * fem,
+                  //               child: Image.asset(
+                  //                 'REPLACE_IMAGE:51:309',
+                  //                 width: 16 * fem,
+                  //                 height: 16 * fem,
+                  //               ),
+                  //             ),
+                  //             SizedBox(
+                  //               width: 4 * fem,
+                  //             ),
+                  //             Container(
+                  //               // wifihigh2AX (51:312)
+                  //               width: 16 * fem,
+                  //               height: 16 * fem,
+                  //               child: Image.asset(
+                  //                 'REPLACE_IMAGE:51:312',
+                  //                 width: 16 * fem,
+                  //                 height: 16 * fem,
+                  //               ),
+                  //             ),
+                  //             SizedBox(
+                  //               width: 4 * fem,
+                  //             ),
+                  //             Container(
+                  //               // batteryemptysS3 (51:318)
+                  //               width: 16 * fem,
+                  //               height: 16 * fem,
+                  //               child: Image.asset(
+                  //                 'REPLACE_IMAGE:51:318',
+                  //                 width: 16 * fem,
+                  //                 height: 16 * fem,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     // autogroupze4sLqR (R57RFndzu3LWFeq4UYze4s)
                     width: double.infinity,
@@ -306,8 +308,8 @@ class _Scene extends State<Scene> {
                                         children: [
                                           Container(
                                             // frame27659 (I51:293;50:864)
-                                            margin: EdgeInsets.fromLTRB(0 * fem,
-                                                0 * fem, 38.5 * fem, 0 * fem),
+                                            // margin: EdgeInsets.fromLTRB(0 * fem,
+                                            //     0 * fem, 38.5 * fem, 0 * fem),
                                             height: double.infinity,
                                             child: Column(
                                               crossAxisAlignment:
@@ -354,23 +356,18 @@ class _Scene extends State<Scene> {
                                               ],
                                             ),
                                           ),
-                                          TextButton(
-                                            // questiontextygf (51:294)
-                                            onPressed: () {},
-                                            style: TextButton.styleFrom(
-                                              padding: EdgeInsets.zero,
-                                            ),
-                                            child: Container(
-                                              // caretdownuRu (I51:293;51:266)
-                                              margin: EdgeInsets.fromLTRB(
-                                                  0 * fem,
-                                                  2 * fem,
-                                                  0 * fem,
-                                                  0 * fem),
-                                              width: 22 * fem,
-                                              height: 12 * fem,
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextButton(
+                                              // questiontextygf (51:294)
+                                              onPressed: _openNewPositionScreen,
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero,
+                                              ),
+                                              // child: Text('Nice'),
                                               child: Image.asset(
-                                                'assets/screens/images/caretdown-Juq.png',
+                                                'assets/screens/images/caretdown-RyD.png',
+                                                // 'Image1',
                                                 width: 22 * fem,
                                                 height: 12 * fem,
                                               ),
@@ -491,7 +488,10 @@ class _Scene extends State<Scene> {
                                     width: double.infinity,
                                     height: 56 * fem,
                                     decoration: BoxDecoration(
-                                      color: Color(0xff3a64f6),
+                                      color: Color(
+                                          0xfff8f8f8), //Color(0xff3a64f6),
+                                      border: Border.all(
+                                          color: Color(0xff3a64f6), width: 1),
                                       borderRadius:
                                           BorderRadius.circular(32 * fem),
                                     ),
@@ -506,7 +506,7 @@ class _Scene extends State<Scene> {
                                           width: 15 * fem,
                                           height: 21 * fem,
                                           child: Image.asset(
-                                            'REPLACE_IMAGE:I51:296;50:889',
+                                            'assets/screens/images/microphone.png',
                                             width: 15 * fem,
                                             height: 21 * fem,
                                           ),
@@ -523,7 +523,7 @@ class _Scene extends State<Scene> {
                                               fontWeight: FontWeight.w600,
                                               height: 1.3333333333 * ffem / fem,
                                               letterSpacing: 0.54 * fem,
-                                              color: Color(0xfff8f8f8),
+                                              color: Color(0xff3a64f6),
                                             ),
                                           ),
                                         ),
@@ -547,7 +547,7 @@ class _Scene extends State<Scene> {
                                       width: 13 * fem,
                                       height: 13 * fem,
                                       child: Image.asset(
-                                        'REPLACE_IMAGE:51:298',
+                                        'assets/screens/images/info-8Gj.png',
                                         width: 13 * fem,
                                         height: 13 * fem,
                                       ),
