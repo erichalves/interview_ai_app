@@ -1,6 +1,7 @@
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myapp/api_service.dart';
-
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 
 void main() {
   late ApiService apiService;
@@ -10,50 +11,42 @@ void main() {
   });
 
   group('ApiService', () {
-    test('Fetch answered questions', () async {
-      final result = await apiService.getAnsweredQuestions();
-
-      // Verify your results
-      // For example, ensure the result contains a specific key
-      expect(result.containsKey('data'), true);
-    });
-
-    test('Fetch used questions count', () async {
-      final result = await apiService.getUsedQuestionsCount();
-
-      // Verify your results
-      // For example, ensure the result is a non-negative number
-      expect(result, greaterThanOrEqualTo(0));
-    });
-
-    test('Check user premium status', () async {
-      final result = await apiService.isUserPremium();
-
-      // Verify your results
-      // For example, ensure the result is a boolean
-      expect(result is bool, true);
-    });
-
-    // For the methods that require input (e.g., uploading an audio file or sending a transcription), 
-    // you'll need to provide a valid input for the test.
     test('Upload audio and get transcription', () async {
-      // Provide an example audio file's bytes for testing
-      var audioFile = <int>[]; // Replace with actual audio file bytes for testing
-
-      final result = await apiService.uploadAndGetTranscription(audioFile);
-
-      // Verify your results
-      expect(result.isNotEmpty, true);
+      var filePath =
+          'test/never_had_experiences.webm'; // Adjust this to your actual path
+      var audioFile = await File(filePath).readAsBytes();
+      var question =
+          "Tell me about a time when you worked on a project with a tight deadline.";
+      final result =
+          await apiService.uploadAndGetTranscription(question, audioFile);
+      var expected = "I have never had such experiences in my life. I'm sorry.";
+      expect(ratio(expected, result) > 75, true);
     });
 
     test('Send transcription and get AI feedback', () async {
-      // Provide an example transcription
-      String transcription = "This is a test transcription.";
-
-      final result = await apiService.getAIFeedback(transcription);
-
-      // Verify your results
-      expect(result.containsKey('feedback'), true);
+      String question =
+          "Tell me about a time when you worked on a project with a tight deadline.";
+      String transcription =
+          "I have never had such experiences in my life. I'm sorry.";
+      final result =
+          await apiService.submitTranscription(0, question, transcription);
+      expect(result.toLowerCase().contains('final score'), true);
     });
+  });
+
+  test('Fetch answered questions', () async {
+    final result = await apiService.getAnsweredQuestions();
+    expect(result.length, 1);
+    expect(result.keys.first, 0);
+  });
+
+  test('Fetch used questions count', () async {
+    final result = await apiService.getUsedQuestionsCount();
+    expect(result, greaterThanOrEqualTo(0));
+  });
+
+  test('Check user premium status', () async {
+    final result = await apiService.isUserPremium();
+    expect(result, false);
   });
 }
