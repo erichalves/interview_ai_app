@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:device_info/device_info.dart';
 import 'dart:io';
-import 'dart:convert';
 
 class ApiService {
   final String baseUrl = 'http://0.0.0.0:8080';
@@ -15,7 +14,7 @@ class ApiService {
     }());
 
     if (isTest) {
-      return 'testDeviceId';
+      return 'local_test_device_id';
     }
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -117,6 +116,39 @@ class ApiService {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       return jsonResponse['evaluation'];
+    } else {
+      throw Exception('Failure with status code ${response.statusCode}');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchQuestions({
+    int? questionId,
+    String? question,
+    String? company,
+    String? jobPosition,
+  }) async {
+    Map<String, String> queryParams = {};
+
+    if (questionId != null) queryParams['question_id'] = questionId.toString();
+    if (question != null) queryParams['question'] = question;
+    if (company != null) queryParams['company'] = company;
+    if (jobPosition != null) queryParams['job_position'] = jobPosition;
+
+    final Uri uri;
+
+    final url = baseUrl.split('//');
+    if (url[0] == 'http:') {
+      uri = Uri.http(url[1], '/get-questions', queryParams);
+    } else {
+      uri = Uri.https(url[1], '/get-questions', queryParams);
+    }
+
+    final response =
+        await http.get(uri, headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse.map((data) => data as Map<String, dynamic>).toList();
     } else {
       throw Exception('Failure with status code ${response.statusCode}');
     }
