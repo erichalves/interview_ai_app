@@ -49,4 +49,13 @@ void main() {
     final result = await apiService.isUserPremium();
     expect(result, false);
   });
+
+  test('Fetch questions', () async {
+    final questions = await apiService.fetchQuestions(questionId: 0);
+    expect(questions.isNotEmpty, true);
+    expect(questions[0].containsKey('id'), true);
+    expect(questions[0].containsKey('question'), true);
+    expect(questions[0].containsKey('company'), true);
+    expect(questions[0].containsKey('job_position'), true);
+  });
 }
