@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'dart:ui';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
-import 'package:myapp/screens/recording_widget.dart';
 import 'package:myapp/screens/free_submissions_text.dart';
 import 'package:myapp/functions/audio_recorder.dart';
 
@@ -13,7 +11,7 @@ class Scene extends StatefulWidget {
   _Scene createState() => _Scene();
 }
 
-enum RecordingState { standBy, recording, completed }
+enum RecordingState { standBy, recording, completed, transcribing }
 
 class _Scene extends State<Scene> {
   int _countFreeSubmissions = 0;
@@ -21,7 +19,7 @@ class _Scene extends State<Scene> {
   final RecordingManager _recordingManager = RecordingManager();
   final int _recommendedTime = 3 * 60; //time in seconds
   final int _maxTime = 5 * 60;
-  late Timer _timer;
+  Timer? _timer;
   int _timerCount = 0;
 
   @override
@@ -30,6 +28,8 @@ class _Scene extends State<Scene> {
   }
 
   void _startTimer() {
+    _timerCount = 0;
+    _recordingState = RecordingState.recording;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_timerCount > _maxTime) {
         timer.cancel();
@@ -45,21 +45,27 @@ class _Scene extends State<Scene> {
     });
   }
 
+  void _stopTimer() {
+    setState(() {
+      _recordingState = RecordingState.completed;
+    });
+    _timer?.cancel();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
 
-  Widget recordingButtons(
-      double fem,
-      double ffem,
-      RecordingState recordingState,
-      RecordingManager recordingManager,
-      int timer) {
+  Widget recordingButton(double fem, double ffem, RecordingState recordingState,
+      RecordingManager recordingManager, int timer) {
     if (recordingState == RecordingState.standBy) {
       return TextButton(
-        onPressed: recordingManager.startRecording,
+        onPressed: () {
+          recordingManager.startRecording();
+          _startTimer();
+        },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
         ),
@@ -110,7 +116,10 @@ class _Scene extends State<Scene> {
       );
     } else if (recordingState == RecordingState.recording) {
       return TextButton(
-        onPressed: () {},
+        onPressed: () {
+          recordingManager.stopRecording();
+          _stopTimer();
+        },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
         ),
@@ -119,7 +128,9 @@ class _Scene extends State<Scene> {
               EdgeInsets.fromLTRB(27.75 * fem, 16 * fem, 14 * fem, 16 * fem),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Color(0xff3154cd),
+            color: _timerCount <= _recommendedTime
+                ? Color(0xff3154cd)
+                : Color(0xff891a1e),
             borderRadius: BorderRadius.circular(32 * fem),
           ),
           child: Row(
@@ -153,7 +164,209 @@ class _Scene extends State<Scene> {
           ),
         ),
       );
-    } else if (recordingState == RecordingState.completed) {}
+    } else if (recordingState == RecordingState.completed) {
+      return TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+        ),
+        child: Container(
+          width: double.infinity,
+          height: 56 * fem,
+          child: Container(
+            // largebuttonLKu (113:495)
+            padding:
+                EdgeInsets.fromLTRB(28.5 * fem, 16 * fem, 14 * fem, 16 * fem),
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 228, 228, 228),
+              // border: Border.all(color: Color.fromARGB(255, 138, 138, 138)),
+              borderRadius: BorderRadius.circular(32 * fem),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  // microphonezvF (I113:495;50:891)
+                  margin: EdgeInsets.fromLTRB(
+                      0 * fem, 0 * fem, 12.5 * fem, 0 * fem),
+                  width: 15 * fem,
+                  height: 21 * fem,
+                  child: Image.asset(
+                    'assets/screens/images/microphone.png',
+                    width: 15 * fem,
+                    height: 21 * fem,
+                  ),
+                ),
+                Text(
+                  // buttonGcs (I113:495;50:879)
+                  '${formatTime(_timerCount)} / 5:00',
+                  style: SafeGoogleFont(
+                    'Roboto',
+                    fontSize: 18 * ffem,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3333333333 * ffem / fem,
+                    letterSpacing: 0.54 * fem,
+                    color: Color.fromARGB(255, 138, 138, 138),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    throw Exception("State not defined");
+  }
+
+  Widget bottomButtons(
+    double fem,
+    double ffem,
+    RecordingState recordingState,
+  ) {
+    if (recordingState == RecordingState.standBy) {
+      return TextButton(
+        onPressed: () {},
+        child: Container(
+          // smallbuttonuT9 (51:290)
+          padding: EdgeInsets.fromLTRB(5 * fem, 8 * fem, 5 * fem, 8 * fem),
+          width: 150 * fem,
+          height: 40 * fem,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xff3a64f6)),
+            borderRadius: BorderRadius.circular(32 * fem),
+          ),
+          child: Container(
+            // autogroupund1BQf (R57S11tyBCdoBvRtbwunD1)
+            // width: double.infinity,
+            // height: double.infinity,
+            alignment: Alignment.center,
+            child: Text(
+              'Skip question',
+              style: SafeGoogleFont(
+                'Roboto',
+                fontSize: 18 * ffem,
+                fontWeight: FontWeight.w600,
+                height: 1.3333333333 * ffem / fem,
+                letterSpacing: 0.54 * fem,
+                color: Color(0xff3a64f6),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else if (recordingState == RecordingState.recording) {
+      return Container(
+        width: double.infinity,
+        height: 56 * fem,
+      );
+    } else if (recordingState == RecordingState.completed) {
+      return Container(
+        // frame2Fmd (113:560)
+        margin: EdgeInsets.fromLTRB(46 * fem, 0 * fem, 41 * fem, 0 * fem),
+        width: double.infinity,
+        height: 56 * fem,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              // largebutton5Vm (113:501)
+              margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 16 * fem, 0 * fem),
+              child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(
+                      27 * fem, 16 * fem, 16 * fem, 16 * fem),
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xff891a1e)),
+                    borderRadius: BorderRadius.circular(32 * fem),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        // trashfym (I113:501;50:891)
+                        margin: EdgeInsets.fromLTRB(
+                            0 * fem, 0 * fem, 11 * fem, 1.5 * fem),
+                        width: 18 * fem,
+                        height: 19.5 * fem,
+                        child: Image.asset(
+                          'assets/screens/images/trash.png',
+                          width: 18 * fem,
+                          height: 19.5 * fem,
+                        ),
+                      ),
+                      Text(
+                        // buttonMLo (I113:501;50:879)
+                        'Discard',
+                        style: SafeGoogleFont(
+                          'Roboto',
+                          fontSize: 18 * ffem,
+                          fontWeight: FontWeight.w600,
+                          height: 1.3333333333 * ffem / fem,
+                          letterSpacing: 0.54 * fem,
+                          color: Color(0xff891a1e),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            TextButton(
+              // largebuttonq15 (113:554)
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+              ),
+              child: Container(
+                padding:
+                    EdgeInsets.fromLTRB(27 * fem, 16 * fem, 19 * fem, 16 * fem),
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xff3a64f6),
+                  borderRadius: BorderRadius.circular(32 * fem),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      // uploadsimpleGMH (I113:554;50:889)
+                      margin: EdgeInsets.fromLTRB(
+                          0 * fem, 0 * fem, 11 * fem, 0 * fem),
+                      width: 18 * fem,
+                      height: 18 * fem,
+                      child: Image.asset(
+                        'assets/screens/images/uploadsimple.png',
+                        width: 18 * fem,
+                        height: 18 * fem,
+                      ),
+                    ),
+                    Text(
+                      // button8eP (I113:554;50:872)
+                      'Save',
+                      style: SafeGoogleFont(
+                        'Roboto',
+                        fontSize: 18 * ffem,
+                        fontWeight: FontWeight.w600,
+                        height: 1.3333333333 * ffem / fem,
+                        letterSpacing: 0.54 * fem,
+                        color: Color(0xfff8f8f8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     throw Exception("State not defined");
   }
 
@@ -200,83 +413,6 @@ class _Scene extends State<Scene> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Container(
-                  //   // frame1W8K (51:306)
-                  //   margin: EdgeInsets.fromLTRB(
-                  //       15 * fem, 0 * fem, 18 * fem, 28 * fem),
-                  //   width: double.infinity,
-                  //   height: 22 * fem,
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       // Center(
-                  //       //   // jmm (51:307)
-                  //       //   child: Container(
-                  //       //     margin: EdgeInsets.fromLTRB(
-                  //       //         0 * fem, 0 * fem, 237 * fem, 0 * fem),
-                  //       //     child: Text(
-                  //       //       '9:30',
-                  //       //       textAlign: TextAlign.center,
-                  //       //       style: SafeGoogleFont(
-                  //       //         'Source Sans Pro',
-                  //       //         fontSize: 14 * ffem,
-                  //       //         fontWeight: FontWeight.w700,
-                  //       //         height: 1.5714285714 * ffem / fem,
-                  //       //         color: Color(0xff171d25),
-                  //       //       ),
-                  //       //     ),
-                  //       //   ),
-                  //       // ),
-                  //       Container(
-                  //         // frame1hkX (51:308)
-                  //         margin: EdgeInsets.fromLTRB(
-                  //             0 * fem, 3 * fem, 0 * fem, 3 * fem),
-                  //         height: double.infinity,
-                  //         child: Row(
-                  //           crossAxisAlignment: CrossAxisAlignment.center,
-                  //           children: [
-                  //             Container(
-                  //               // cellsignalnoneaZR (51:309)
-                  //               width: 16 * fem,
-                  //               height: 16 * fem,
-                  //               child: Image.asset(
-                  //                 'REPLACE_IMAGE:51:309',
-                  //                 width: 16 * fem,
-                  //                 height: 16 * fem,
-                  //               ),
-                  //             ),
-                  //             SizedBox(
-                  //               width: 4 * fem,
-                  //             ),
-                  //             Container(
-                  //               // wifihigh2AX (51:312)
-                  //               width: 16 * fem,
-                  //               height: 16 * fem,
-                  //               child: Image.asset(
-                  //                 'REPLACE_IMAGE:51:312',
-                  //                 width: 16 * fem,
-                  //                 height: 16 * fem,
-                  //               ),
-                  //             ),
-                  //             SizedBox(
-                  //               width: 4 * fem,
-                  //             ),
-                  //             Container(
-                  //               // batteryemptysS3 (51:318)
-                  //               width: 16 * fem,
-                  //               height: 16 * fem,
-                  //               child: Image.asset(
-                  //                 'REPLACE_IMAGE:51:318',
-                  //                 width: 16 * fem,
-                  //                 height: 16 * fem,
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   Container(
                     // autogroupze4sLqR (R57RFndzu3LWFeq4UYze4s)
                     width: double.infinity,
@@ -313,7 +449,7 @@ class _Scene extends State<Scene> {
             Container(
               // autogrouplm7h9wH (R57RjGrCYUMn3tmj87LM7h)
               padding:
-                  EdgeInsets.fromLTRB(16 * fem, 16 * fem, 16 * fem, 40 * fem),
+                  EdgeInsets.fromLTRB(16 * fem, 16 * fem, 16 * fem, 16 * fem),
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -390,7 +526,7 @@ class _Scene extends State<Scene> {
                   Container(
                     // frame14LRR (51:291)
                     margin: EdgeInsets.fromLTRB(
-                        0 * fem, 0 * fem, 0 * fem, 86 * fem),
+                        0 * fem, 0 * fem, 0 * fem, 48 * fem),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(32 * fem),
@@ -615,7 +751,12 @@ class _Scene extends State<Scene> {
                                   // largebuttonuu5 (51:296)
                                   margin: EdgeInsets.fromLTRB(
                                       17.5 * fem, 0 * fem, 16.5 * fem, 8 * fem),
-                                  child: recordingButtons()),
+                                  child: recordingButton(
+                                      fem,
+                                      ffem,
+                                      _recordingState,
+                                      _recordingManager,
+                                      _timerCount)),
                               Container(
                                 // frame1TBq (51:297)
                                 padding: EdgeInsets.fromLTRB(
@@ -656,35 +797,7 @@ class _Scene extends State<Scene> {
                       ],
                     ),
                   ),
-                  Container(
-                    // smallbuttonuT9 (51:290)
-                    padding: EdgeInsets.fromLTRB(
-                        16 * fem, 8 * fem, 3 * fem, 8 * fem),
-                    width: 137 * fem,
-                    height: 40 * fem,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff3a64f6)),
-                      borderRadius: BorderRadius.circular(32 * fem),
-                    ),
-                    child: Container(
-                      // autogroupund1BQf (R57S11tyBCdoBvRtbwunD1)
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: Center(
-                        child: Text(
-                          'Skip question',
-                          style: SafeGoogleFont(
-                            'Roboto',
-                            fontSize: 18 * ffem,
-                            fontWeight: FontWeight.w600,
-                            height: 1.3333333333 * ffem / fem,
-                            letterSpacing: 0.54 * fem,
-                            color: Color(0xff3a64f6),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  bottomButtons(fem, ffem, _recordingState),
                 ],
               ),
             ),

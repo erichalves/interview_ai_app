@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RecordingManager {
   late FlutterSoundRecorder _recorder;
@@ -16,13 +17,24 @@ class RecordingManager {
 
   Future<String> _getTemporaryPath() async {
     Directory tempDir = await getTemporaryDirectory();
-    return '${tempDir.path}/recording.mp3';
+    return '${tempDir.path}/recording.mp4';
+  }
+
+  Future<void> requestRecordPermission() async {
+    var status = await Permission.microphone.status;
+    if (!status.isGranted) {
+      Permission.microphone.request();
+    }
   }
 
   Future<void> startRecording() async {
+    await requestRecordPermission();
     await _initializeRecorder();
     _path = await _getTemporaryPath();
-    await _recorder.startRecorder(toFile: _path, codec: Codec.mp3);
+    await _recorder.startRecorder(
+      toFile: _path,
+      codec: Codec.aacMP4,
+    );
   }
 
   Future<void> stopRecording() async {
