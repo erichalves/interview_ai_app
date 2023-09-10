@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:myapp/api_service.dart';
+import 'package:myapp/functions/api_service.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 
 void main() {

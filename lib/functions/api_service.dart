@@ -4,7 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'dart:io';
 
 class ApiService {
-  final String baseUrl = 'http://0.0.0.0:8080';
+  final String baseUrl = 'http://10.0.2.2:8080';
 
   Future<String> getDeviceId() async {
     bool isTest = false;
@@ -78,13 +78,13 @@ class ApiService {
   }
 
   Future<String> uploadAndGetTranscription(
-      String question, dynamic audioFile) async {
+      String question, String audioPath) async {
     var request =
         http.MultipartRequest('POST', Uri.parse('$baseUrl/upload-audio'));
 
     // Add audio file to the request
-    request.files.add(http.MultipartFile.fromBytes('audio', audioFile,
-        filename: 'audio.webm'));
+    var multipartFile = await http.MultipartFile.fromPath('audio', audioPath);
+    request.files.add(multipartFile);
 
     // Add user_id and question to the request fields
     request.fields['user_id'] = await getDeviceId();

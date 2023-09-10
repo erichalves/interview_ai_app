@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'dart:async';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
-import 'package:myapp/screens/free_submissions_text.dart';
 import 'package:myapp/functions/audio_recorder.dart';
+import 'package:myapp/functions/api_service.dart';
+import 'package:myapp/screens/transcripted.dart';
 
 class Scene extends StatefulWidget {
   @override
@@ -21,10 +20,21 @@ class _Scene extends State<Scene> {
   final int _maxTime = 5 * 60;
   Timer? _timer;
   int _timerCount = 0;
+  ApiService apiService = ApiService();
+  int questionId = 1;
+  String question =
+      'Tell me about a time when you worked on a project with a tight deadline';
 
   @override
   void initState() {
     super.initState();
+    apiService.fetchQuestions(questionId: questionId).then(
+      (value) {
+        setState(() {
+          question = value[0]["question"].toString();
+        });
+      },
+    );
   }
 
   void _startTimer() {
@@ -216,6 +226,53 @@ class _Scene extends State<Scene> {
           ),
         ),
       );
+    } else if (recordingState == RecordingState.transcribing) {
+      return Container(
+        // largebuttonHas (68:303)
+        margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 8 * fem),
+        padding: EdgeInsets.fromLTRB(26.25 * fem, 16 * fem, 4 * fem, 16 * fem),
+        width: double.infinity,
+        height: 56 * fem,
+        decoration: BoxDecoration(
+          color: Color(0xffd0d4d9),
+          borderRadius: BorderRadius.circular(32 * fem),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              // circlenotchuMM (I68:303;50:902)
+              margin: EdgeInsets.fromLTRB(
+                  0 * fem, 0.75 * fem, 10.25 * fem, 0 * fem),
+              width: 19.5 * fem,
+              height: 18.75 * fem,
+              child: Image.asset(
+                'REPLACE_IMAGE:I68:303;50:902',
+                width: 19.5 * fem,
+                height: 18.75 * fem,
+              ),
+            ),
+            Container(
+              // autogroupyzlsMz3 (R58nU1esJ7XkscbzvnYzLs)
+              width: 176 * fem,
+              height: double.infinity,
+              child: Center(
+                child: Text(
+                  'Transcribing answer',
+                  style: SafeGoogleFont(
+                    'Roboto',
+                    fontSize: 18 * ffem,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3333333333 * ffem / fem,
+                    letterSpacing: 0.54 * fem,
+                    color: Color(0xff516177),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     }
     throw Exception("State not defined");
   }
@@ -256,7 +313,8 @@ class _Scene extends State<Scene> {
           ),
         ),
       );
-    } else if (recordingState == RecordingState.recording) {
+    } else if (recordingState == RecordingState.recording ||
+        recordingState == RecordingState.transcribing) {
       return Container(
         width: double.infinity,
         height: 56 * fem,
@@ -320,7 +378,17 @@ class _Scene extends State<Scene> {
             ),
             TextButton(
               // largebuttonq15 (113:554)
-              onPressed: () {},
+              onPressed: () {
+                recordingState = RecordingState.transcribing;
+                apiService
+                    .uploadAndGetTranscription(
+                        question, _recordingManager.getRecordingPath())
+                    .then((transcriptedAudio) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TranscriptedScene(
+                          transcriptedAudio: transcriptedAudio)));
+                });
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
               ),
@@ -690,7 +758,7 @@ class _Scene extends State<Scene> {
                                             maxWidth: 324 * fem,
                                           ),
                                           child: Text(
-                                            '"Tell me about a time when you worked on a project with a tight deadline"',
+                                            '"$question"',
                                             textAlign: TextAlign.center,
                                             style: SafeGoogleFont(
                                               'Squada One',

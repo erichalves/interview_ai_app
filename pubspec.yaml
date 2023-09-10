@@ -119,7 +119,6 @@ flutter:
     - assets/old/images/cellsignalnone-AZZ.png
     - assets/screens/images/-G27.png
     - assets/screens/images/caretdown.png
-    - assets/screens/images/-jbq.png
     - assets/screens/images/-P9u.png
     - assets/screens/images/star-hS3.png
     - assets/old/images/star-QbM.png
@@ -256,6 +255,8 @@ flutter:
     - assets/screens/images/rectangle.png
     - assets/screens/images/caretdown-SFm.png
     - assets/screens/images/star-FpP.png
+    - assets/screens/images/ArrowCounterClockwise.png
+    - assets/screens/images/PaperPlaneTilt.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

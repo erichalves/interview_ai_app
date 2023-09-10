@@ -43,7 +43,7 @@ class RecordingManager {
   }
 
   Future<void> deleteRecording() async {
-    if (_path.length == 0) {
+    if (_path.isEmpty) {
       throw Exception("No recording found to delete.");
     }
     File file = File(_path);
@@ -53,10 +53,10 @@ class RecordingManager {
     _path = '';
   }
 
-  File getRecording() {
-    if (_path == null) {
+  String getRecordingPath() {
+    if (_path == '') {
       throw Exception("No recording found.");
     }
-    return File(_path);
+    return _path;
   }
 }
