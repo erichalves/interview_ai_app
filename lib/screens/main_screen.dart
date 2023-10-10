@@ -12,7 +12,7 @@ class Scene extends StatefulWidget {
 
 enum RecordingState { standBy, recording, completed, transcribing }
 
-class _Scene extends State<Scene> {
+class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
   int _countFreeSubmissions = 0;
   RecordingState _recordingState = RecordingState.standBy;
   final RecordingManager _recordingManager = RecordingManager();
@@ -23,7 +23,9 @@ class _Scene extends State<Scene> {
   ApiService apiService = ApiService();
   int questionId = 1;
   String question =
-      'Tell me about a time when you worked on a project with a tight deadline';
+      "Tell me about a time when you worked on a project with a tight deadline.";
+  late AnimationController _controller;
+  int _repeatCount = 0;
 
   @override
   void initState() {
@@ -34,7 +36,58 @@ class _Scene extends State<Scene> {
           question = value[0]["question"].toString();
         });
       },
-    );
+    ).catchError((error) {
+      final snackBar = SnackBar(
+        content: Text('Error fetching questions: $error'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+  }
+
+  void timeout() {
+    // Answer from whisper timed out
+  }
+
+  void _startTranscription(BuildContext context) {
+    setState(() {
+      _recordingState = RecordingState.transcribing;
+    });
+    try {
+      _controller; // Controller already defined, moving on...
+      return;
+    } catch (e) {
+      // Do nothing
+    }
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2), // Duration for a complete spin
+      vsync: this,
+    )
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _repeatCount++;
+          if (_repeatCount < 5) {
+            _controller.forward(
+                from: 0.0); // Restart the animation from the beginning
+          } else {
+            timeout();
+          }
+        }
+      })
+      ..forward();
+
+    apiService
+        .uploadAndGetTranscription(
+            question, _recordingManager.getRecordingPath())
+        .then((transcriptedAudio) => _endTranscription(transcriptedAudio));
+  }
+
+  void _endTranscription(String transcriptedAudio) {
+    _recordingState = RecordingState.completed;
+    _controller.dispose();
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            TranscriptedScene(transcriptedAudio: transcriptedAudio)));
   }
 
   void _startTimer() {
@@ -65,6 +118,7 @@ class _Scene extends State<Scene> {
   @override
   void dispose() {
     _timer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -230,7 +284,7 @@ class _Scene extends State<Scene> {
       return Container(
         // largebuttonHas (68:303)
         margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 8 * fem),
-        padding: EdgeInsets.fromLTRB(26.25 * fem, 16 * fem, 4 * fem, 16 * fem),
+        padding: EdgeInsets.fromLTRB(16 * fem, 16 * fem, 10 * fem, 16 * fem),
         width: double.infinity,
         height: 56 * fem,
         decoration: BoxDecoration(
@@ -241,24 +295,27 @@ class _Scene extends State<Scene> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              // circlenotchuMM (I68:303;50:902)
-              margin: EdgeInsets.fromLTRB(
-                  0 * fem, 0.75 * fem, 10.25 * fem, 0 * fem),
-              width: 19.5 * fem,
-              height: 18.75 * fem,
-              child: Image.asset(
-                'REPLACE_IMAGE:I68:303;50:902',
-                width: 19.5 * fem,
-                height: 18.75 * fem,
-              ),
-            ),
+                // circlenotchuMM (I68:303;50:902)
+                margin: EdgeInsets.fromLTRB(4 * fem, 0 * fem, 0 * fem, 0 * fem),
+                width: 19.5 * fem * 1.3,
+                height: 18.75 * fem * 1.3,
+                child: AnimatedBuilder(
+                    animation: _controller,
+                    builder: (BuildContext context, Widget? child) {
+                      return Transform.rotate(
+                          angle: _controller.value * 2 * 3.14159,
+                          child: Image.asset(
+                              'assets/screens/images/CircleNotch.png',
+                              width: 19.5 * fem * 1.3,
+                              height: 18.75 * fem * 1.3));
+                    })),
             Container(
               // autogroupyzlsMz3 (R58nU1esJ7XkscbzvnYzLs)
-              width: 176 * fem,
+              width: 130 * fem,
               height: double.infinity,
               child: Center(
                 child: Text(
-                  'Transcribing answer',
+                  'Transcribing',
                   style: SafeGoogleFont(
                     'Roboto',
                     fontSize: 18 * ffem,
@@ -378,17 +435,7 @@ class _Scene extends State<Scene> {
             ),
             TextButton(
               // largebuttonq15 (113:554)
-              onPressed: () {
-                recordingState = RecordingState.transcribing;
-                apiService
-                    .uploadAndGetTranscription(
-                        question, _recordingManager.getRecordingPath())
-                    .then((transcriptedAudio) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TranscriptedScene(
-                          transcriptedAudio: transcriptedAudio)));
-                });
-              },
+              onPressed: () => {_startTranscription(context)},
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
               ),

@@ -257,6 +257,7 @@ flutter:
     - assets/screens/images/star-FpP.png
     - assets/screens/images/ArrowCounterClockwise.png
     - assets/screens/images/PaperPlaneTilt.png
+    - assets/screens/images/CircleNotch.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
