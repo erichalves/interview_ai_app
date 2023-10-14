@@ -4,6 +4,9 @@ import 'package:myapp/utils.dart';
 import 'package:myapp/functions/audio_recorder.dart';
 import 'package:myapp/functions/api_service.dart';
 import 'package:myapp/screens/transcripted.dart';
+import 'package:myapp/screens/question_selection.dart';
+import 'package:myapp/screens/logo_widget.dart';
+import 'package:myapp/screens/submissions_widget.dart';
 
 class Scene extends StatefulWidget {
   @override
@@ -510,57 +513,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              // autogrouptqaxpMy (R57QziEnXyywrvjWP4tQAX)
-              padding:
-                  EdgeInsets.fromLTRB(20 * fem, 14 * fem, 17 * fem, 6 * fem),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xfff8f8f8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x33141414),
-                    offset: Offset(2 * fem, 4 * fem),
-                    blurRadius: 4 * fem,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    // autogroupze4sLqR (R57RFndzu3LWFeq4UYze4s)
-                    width: double.infinity,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          // listFSb (51:304)
-                          margin: EdgeInsets.fromLTRB(
-                              0 * fem, 0 * fem, 159 * fem, 0 * fem),
-                          width: 24 * fem,
-                          height: 18 * fem,
-                          child: Image.asset(
-                            'assets/screens/images/list-5hV.png',
-                            width: 24 * fem,
-                            height: 18 * fem,
-                          ),
-                        ),
-                        Container(
-                          // H8P (51:305)
-                          width: 170 * fem,
-                          height: 36 * fem,
-                          child: Image.asset(
-                            'assets/screens/images/-P9u.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Logo(baseWidth: baseWidth, fem: fem, ffem: ffem),
             Container(
               // autogrouplm7h9wH (R57RjGrCYUMn3tmj87LM7h)
               padding:
@@ -569,74 +522,11 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    // frame1EC3 (51:301)
-                    margin: EdgeInsets.fromLTRB(
-                        0 * fem, 0 * fem, 0 * fem, 30 * fem),
-                    width: double.infinity,
-                    height: 48 * fem,
-                    child: Stack(
-                      children: [
-                        Align(
-                          // freesubmissions335TZ (51:302)
-                          // left: 0 * fem,
-                          // top: 10 * fem,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Free submissions: ${_countFreeSubmissions}/3',
-                            style: SafeGoogleFont(
-                              'Roboto',
-                              fontSize: 16 * ffem,
-                              fontWeight: FontWeight.w400,
-                              height: 1.5 * ffem / fem,
-                              letterSpacing: 0.8 * fem,
-                              color: Color(0xff516177),
-                            ),
-                          ),
-                          // Align(
-                          //   child: SizedBox(
-                          //     width: 175 * fem,
-                          //     height: 24 * fem,
-                          //     child: FreeSubmissionText(fem: fem, ffem: ffem),
-                          //   ),
-                          // ),
-                        ),
-                        Align(
-                          // smallbuttonG2F (51:303)
-                          // left: 169 * fem,
-                          // top: 0 * fem,
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(
-                                  8 * fem, 8 * fem, 8 * fem, 8 * fem),
-                              width: 150 * fem,
-                              height: 40 * fem,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff0f993f)),
-                                borderRadius: BorderRadius.circular(32 * fem),
-                              ),
-                              child: Text(
-                                'Upgrade!',
-                                style: SafeGoogleFont(
-                                  'Roboto',
-                                  fontSize: 18 * ffem,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.3333333333 * ffem / fem,
-                                  letterSpacing: 0.54 * fem,
-                                  color: Color(0xff0f993f),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Submissions(
+                    baseWidth: baseWidth,
+                    fem: fem,
+                    ffem: ffem,
+                    countFreeSubmissions: _countFreeSubmissions,
                   ),
                   Container(
                     // frame14LRR (51:291)
@@ -832,16 +722,29 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                                           width: double.infinity,
                                           height: double.infinity,
                                           child: Center(
-                                            child: Text(
-                                              'Choose Question',
-                                              style: SafeGoogleFont(
-                                                'Roboto',
-                                                fontSize: 18 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height:
-                                                    1.3333333333 * ffem / fem,
-                                                letterSpacing: 0.54 * fem,
-                                                color: Color(0xff3a64f6),
+                                            child: TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            QuestionSelection(
+                                                                questionId:
+                                                                    questionId)));
+                                              },
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero,
+                                              ),
+                                              child: Text(
+                                                'Choose Question',
+                                                style: SafeGoogleFont(
+                                                  'Roboto',
+                                                  fontSize: 18 * ffem,
+                                                  fontWeight: FontWeight.w600,
+                                                  height:
+                                                      1.3333333333 * ffem / fem,
+                                                  letterSpacing: 0.54 * fem,
+                                                  color: Color(0xff3a64f6),
+                                                ),
                                               ),
                                             ),
                                           ),
