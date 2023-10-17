@@ -48,6 +48,25 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
     });
   }
 
+  void selectQuestion() {
+    apiService.fetchQuestions().then(
+      (questionDict) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Scaffold(
+                    body: QuestionSelection(
+                  questionId: questionId,
+                  question_dict: questionDict,
+                ))));
+      },
+    ).catchError((error) {
+      final snackBar = SnackBar(
+        content: Text('Error fetching questions: $error'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+  }
+
   void timeout() {
     // Answer from whisper timed out
   }
@@ -499,7 +518,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = MediaQuery.of(context).size.width;
+    double baseWidth = 400;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return Container(
@@ -723,14 +742,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                                           height: double.infinity,
                                           child: Center(
                                             child: TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            QuestionSelection(
-                                                                questionId:
-                                                                    questionId)));
-                                              },
+                                              onPressed: selectQuestion,
                                               style: TextButton.styleFrom(
                                                 padding: EdgeInsets.zero,
                                               ),
