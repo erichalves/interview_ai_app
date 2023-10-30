@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'dart:ui';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
 
-class Scene extends StatelessWidget {
+class DiscardWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double baseWidth = 390;
@@ -440,6 +438,7 @@ class Scene extends StatelessWidget {
                 ),
               ),
             ),
+
             Positioned(
               // rectangle2gzP (129:3377)
               left: 0*fem,
@@ -474,7 +473,7 @@ class Scene extends StatelessWidget {
                 height: 256*fem,
                 decoration: BoxDecoration (
                   border: Border.all(color: Color(0xfff0f0f0)),
-                  color: Color(0xfff8f8f8),
+                  color: const Color(0xfff8f8f8),
                   borderRadius: BorderRadius.circular(16*fem),
                   boxShadow: [
                     BoxShadow(
