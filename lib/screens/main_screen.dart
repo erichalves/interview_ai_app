@@ -128,6 +128,16 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
             TranscriptedScene(transcriptedAudio: transcriptedAudio)));
   }
 
+  void discardAudioReply(bool discard) {
+    setState(() {
+      if(discard){
+        _recordingState = RecordingState.completed;
+      } else {
+        _recordingState = RecordingState.standBy;
+      }
+    });
+  }
+
   void _startTimer() {
     _timerCount = 0;
     _recordingState = RecordingState.recording;
@@ -862,7 +872,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            DiscardWarning(_recordingState == RecordingState.discardWarning)
+            _recordingState == RecordingState.discardWarning ? DiscardWarning(discardAudioReply) : const SizedBox()
           ]
         )
       )
