@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:ui';
 import 'package:myapp/utils.dart';
 import 'package:myapp/functions/audio_recorder.dart';
 import 'package:myapp/functions/api_service.dart';
@@ -276,7 +277,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
           ),
         ),
       );
-    } else if (recordingState == RecordingState.completed) {
+    } else if (recordingState == RecordingState.completed || recordingState == RecordingState.discardWarning) {
       return TextButton(
         onPressed: () {},
         style: TextButton.styleFrom(
@@ -872,7 +873,8 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            _recordingState == RecordingState.discardWarning ? DiscardWarning(discardAudioReply) : const SizedBox()
+            _recordingState == RecordingState.discardWarning ? BlurredEffect() : const SizedBox(),
+            _recordingState == RecordingState.discardWarning ? DiscardWarning(discardReplyFunction: discardAudioReply) : const SizedBox()
           ]
         )
       )
