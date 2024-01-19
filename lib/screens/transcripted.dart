@@ -225,26 +225,25 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  // sureiwouldbehappytosharemyexpe (135:3566)
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0 * fem,
-                                                      0 * fem,
-                                                      3 * fem,
-                                                      0 * fem),
+                                                  margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 3 * fem, 0 * fem),
                                                   constraints: BoxConstraints(
                                                     maxWidth: 327 * fem,
                                                   ),
-                                                  child: Text(
-                                                    transcriptedAudio,
+                                                  child: TextField(
+                                                    controller: TextEditingController(text: transcriptedAudio),
                                                     style: SafeGoogleFont(
                                                       'Roboto',
                                                       fontSize: 16 * ffem,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                      fontWeight: FontWeight.w400,
                                                       height: 1.5 * ffem / fem,
                                                       letterSpacing: 0.8 * fem,
                                                       color: const Color(0xff171d25),
                                                     ),
+                                                    decoration: InputDecoration(
+                                                      border: InputBorder.none,
+                                                      hintText: 'Enter text', // Optionally, provide a hint.
+                                                    ),
+                                                    maxLines: null, // Set to null to allow multi-line input.
                                                   ),
                                                 ),
                                                 Container(
