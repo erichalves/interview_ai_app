@@ -19,7 +19,7 @@ class Submissions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // frame1EC3 (51:301)
-      margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 30 * fem),
+      margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 15 * fem),
       width: double.infinity,
       height: 48 * fem,
       child: Stack(

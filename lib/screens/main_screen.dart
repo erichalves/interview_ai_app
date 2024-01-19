@@ -30,6 +30,8 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
   int questionId = 0;
   String question =
       "Tell me about a time when you worked on a project with a tight deadline.";
+  String jobPosition = "Software Engineer";
+  String company = "Google";
   late AnimationController _controller;
   final int waitLimit = 15;
 
@@ -53,6 +55,8 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
       (value) {
         setState(() {
           question = value[0]["question"].toString();
+          jobPosition = value[0]["job_position_full_name"].toString();
+          company = value[0]["company"].toString();
         });
       },
     ).catchError((error) {
@@ -83,6 +87,8 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
               setState(() {
                 questionId = value["questionId"];
                 question = value["question"];
+                jobPosition = value["job_position_full_name"];
+                company = value["company"];
               });
             }
           }
@@ -140,6 +146,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
             setState(() {
               _recordingState = RecordingState.completed;
             });
+            _controller.dispose();
           }
         );
   }
@@ -148,8 +155,19 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
     _recordingState = RecordingState.completed;
     _controller.dispose();
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            TranscriptedScene(transcriptedAudio: transcriptedAudio)));
+        builder: (context) => Scaffold(
+          body: SingleChildScrollView(
+            child: TranscriptedScene(
+              transcriptedAudio: transcriptedAudio,
+              countFreeSubmissions: _countFreeSubmissions,
+              question: question,
+              jobPosition: jobPosition,
+              company: company,
+            )
+          ),
+        ),
+      ),
+    );
   }
 
   void discardAudioReply(bool discard) {
@@ -643,213 +661,231 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  // Container(
+                                  //   // questiontitleVSj (51:293)
+                                  //   margin: EdgeInsets.fromLTRB(
+                                  //       0 * fem, 0 * fem, 0 * fem, 16 * fem),
+                                  //   child: TextButton(
+                                  //     onPressed: () {},
+                                  //     style: TextButton.styleFrom(
+                                  //       padding: EdgeInsets.zero,
+                                  //     ),
+                                  //     child: Container(
+                                  //       padding: EdgeInsets.fromLTRB(100.5 * fem,
+                                  //           16 * fem, 35 * fem, 16 * fem),
+                                  //       width: double.infinity,
+                                  //       height: 84 * fem,
+                                  //       decoration: BoxDecoration(
+                                  //         border:
+                                  //             Border.all(color: const Color(0xfff0f0f0)),
+                                  //         color: const Color(0x7ffdfdfd),
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(16 * fem),
+                                  //         boxShadow: [
+                                  //           BoxShadow(
+                                  //             color: const Color(0x33141414),
+                                  //             offset: Offset(2 * fem, 4 * fem),
+                                  //             blurRadius: 4 * fem,
+                                  //           ),
+                                  //         ],
+                                  //       ),
+                                  //       child: Container(
+                                  //         // frame4RDu (I51:293;50:863)
+                                  //         padding: EdgeInsets.fromLTRB(
+                                  //             0 * fem, 0 * fem, 5 * fem, 0 * fem),
+                                  //         width: double.infinity,
+                                  //         height: double.infinity,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.center,
+                                  //           children: [
+                                  //             SizedBox(
+                                  //               // frame27659 (I51:293;50:864)
+                                  //               // margin: EdgeInsets.fromLTRB(0 * fem,
+                                  //               //     0 * fem, 38.5 * fem, 0 * fem),
+                                  //               height: double.infinity,
+                                  //               child: Column(
+                                  //                 crossAxisAlignment:
+                                  //                     CrossAxisAlignment.center,
+                                  //                 children: [
+                                  //                   Container(
+                                  //                     // positionNoM (I51:293;50:865)
+                                  //                     margin: EdgeInsets.fromLTRB(
+                                  //                         0 * fem,
+                                  //                         0 * fem,
+                                  //                         0 * fem,
+                                  //                         4 * fem),
+                                  //                     child: Text(
+                                  //                       'Software Engineer',
+                                  //                       textAlign: TextAlign.center,
+                                  //                       style: SafeGoogleFont(
+                                  //                         'Roboto',
+                                  //                         fontSize: 18 * ffem,
+                                  //                         fontWeight:
+                                  //                             FontWeight.w500,
+                                  //                         height: 1.3333333333 *
+                                  //                             ffem /
+                                  //                             fem,
+                                  //                         letterSpacing: 0.54 * fem,
+                                  //                         color: const Color(0xff516177),
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                   Text(
+                                  //                     // companyRFq (I51:293;50:866)
+                                  //                     'Google',
+                                  //                     textAlign: TextAlign.center,
+                                  //                     style: SafeGoogleFont(
+                                  //                       'Roboto',
+                                  //                       fontSize: 18 * ffem,
+                                  //                       fontWeight: FontWeight.w400,
+                                  //                       height: 1.3333333333 *
+                                  //                           ffem /
+                                  //                           fem,
+                                  //                       letterSpacing: 0.54 * fem,
+                                  //                       color: const Color(0xff516177),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ],
+                                  //               ),
+                                  //             ),
+                                  //             Align(
+                                  //               alignment: Alignment.centerRight,
+                                  //               child: TextButton(
+                                  //                 // questiontextygf (51:294)
+                                  //                 onPressed: _openNewPositionScreen,
+                                  //                 style: TextButton.styleFrom(
+                                  //                   padding: EdgeInsets.zero,
+                                  //                 ),
+                                  //                 // child: Text('Nice'),
+                                  //                 child: Image.asset(
+                                  //                   'assets/screens/images/caretdown-RyD.png',
+                                  //                   // 'Image1',
+                                  //                   width: 22 * fem,
+                                  //                   height: 12 * fem,
+                                  //                 ),
+                                  //               ),
+                                  //             )
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   Container(
-                                    // questiontitleVSj (51:293)
-                                    margin: EdgeInsets.fromLTRB(
-                                        0 * fem, 0 * fem, 0 * fem, 16 * fem),
-                                    child: TextButton(
-                                      onPressed: () {},
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                      child: Container(
-                                        padding: EdgeInsets.fromLTRB(100.5 * fem,
-                                            16 * fem, 35 * fem, 16 * fem),
-                                        width: double.infinity,
-                                        height: 84 * fem,
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: const Color(0xfff0f0f0)),
-                                          color: const Color(0x7ffdfdfd),
-                                          borderRadius:
-                                              BorderRadius.circular(16 * fem),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: const Color(0x33141414),
-                                              offset: Offset(2 * fem, 4 * fem),
-                                              blurRadius: 4 * fem,
-                                            ),
-                                          ],
+                                    padding: EdgeInsets.fromLTRB(
+                                        17 * fem, 32 * fem, 16 * fem, 16 * fem),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: const Color(0x143a64f6)),
+                                      color: const Color(0x143a64f6),
+                                      borderRadius:
+                                          BorderRadius.circular(16 * fem),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0x33141414),
+                                          offset: Offset(2 * fem, 4 * fem),
+                                          blurRadius: 4 * fem,
                                         ),
-                                        child: Container(
-                                          // frame4RDu (I51:293;50:863)
-                                          padding: EdgeInsets.fromLTRB(
-                                              0 * fem, 0 * fem, 5 * fem, 0 * fem),
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                // frame27659 (I51:293;50:864)
-                                                // margin: EdgeInsets.fromLTRB(0 * fem,
-                                                //     0 * fem, 38.5 * fem, 0 * fem),
-                                                height: double.infinity,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      // positionNoM (I51:293;50:865)
-                                                      margin: EdgeInsets.fromLTRB(
-                                                          0 * fem,
-                                                          0 * fem,
-                                                          0 * fem,
-                                                          4 * fem),
-                                                      child: Text(
-                                                        'Software Engineer',
-                                                        textAlign: TextAlign.center,
-                                                        style: SafeGoogleFont(
-                                                          'Roboto',
-                                                          fontSize: 18 * ffem,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          height: 1.3333333333 *
-                                                              ffem /
-                                                              fem,
-                                                          letterSpacing: 0.54 * fem,
-                                                          color: const Color(0xff516177),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      // companyRFq (I51:293;50:866)
-                                                      'Google',
-                                                      textAlign: TextAlign.center,
-                                                      style: SafeGoogleFont(
-                                                        'Roboto',
-                                                        fontSize: 18 * ffem,
-                                                        fontWeight: FontWeight.w400,
-                                                        height: 1.3333333333 *
-                                                            ffem /
-                                                            fem,
-                                                        letterSpacing: 0.54 * fem,
-                                                        color: const Color(0xff516177),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            // positionNoM (I51:293;50:865)
+                                            margin: EdgeInsets.fromLTRB(
+                                                0 * fem,
+                                                0 * fem,
+                                                0 * fem,
+                                                16 * fem),
+                                            child: Text(
+                                              '$jobPosition at $company',
+                                              // textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Roboto',
+                                                fontSize: 18 * ffem,
+                                                fontWeight:
+                                                    FontWeight.w500,
+                                                height: 1.3333333333 *
+                                                    ffem /
+                                                    fem,
+                                                letterSpacing: 0.54 * fem,
+                                                color: const Color(0xff516177),
                                               ),
-                                              Align(
-                                                alignment: Alignment.centerRight,
-                                                child: TextButton(
-                                                  // questiontextygf (51:294)
-                                                  onPressed: _openNewPositionScreen,
-                                                  style: TextButton.styleFrom(
-                                                    padding: EdgeInsets.zero,
-                                                  ),
-                                                  // child: Text('Nice'),
-                                                  child: Image.asset(
-                                                    'assets/screens/images/caretdown-RyD.png',
-                                                    // 'Image1',
-                                                    width: 22 * fem,
-                                                    height: 12 * fem,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    // questiontextygf (51:294)
-                                    onPressed: () {},
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          17 * fem, 32 * fem, 16 * fem, 16 * fem),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: const Color(0x143a64f6)),
-                                        color: const Color(0x143a64f6),
-                                        borderRadius:
-                                            BorderRadius.circular(16 * fem),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: const Color(0x33141414),
-                                            offset: Offset(2 * fem, 4 * fem),
-                                            blurRadius: 4 * fem,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Center(
-                                            // questionXrb (I51:294;50:860)
-                                            child: Container(
-                                              margin: EdgeInsets.fromLTRB(0 * fem,
-                                                  0 * fem, 0 * fem, 16 * fem),
-                                              width: double.infinity,
-                                              constraints: BoxConstraints(
-                                                maxWidth: 324 * fem,
+                                        Center(
+                                          // questionXrb (I51:294;50:860)
+                                          child: Container(
+                                            margin: EdgeInsets.fromLTRB(0 * fem,
+                                                0 * fem, 0 * fem, 16 * fem),
+                                            width: double.infinity,
+                                            constraints: BoxConstraints(
+                                              maxWidth: 324 * fem,
+                                            ),
+                                            child: Text(
+                                              '"$question"',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Squada One',
+                                                fontSize: 32 * ffem,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.25 * ffem / fem,
+                                                color: const Color(0xff171d25),
                                               ),
-                                              child: Text(
-                                                '"$question"',
-                                                textAlign: TextAlign.center,
-                                                style: SafeGoogleFont(
-                                                  'Squada One',
-                                                  fontSize: 32 * ffem,
-                                                  fontWeight: FontWeight.w400,
-                                                  height: 1.25 * ffem / fem,
-                                                  color: const Color(0xff171d25),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          // largebutton9NB (I51:294;51:243)
+                                          padding: EdgeInsets.fromLTRB(24 * fem,
+                                              16 * fem, 7 * fem, 16 * fem),
+                                          width: 178 * fem,
+                                          height: 56 * fem,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(32 * fem),
+                                          ),
+                                          child: SizedBox(
+                                            // autogroupedsqbEB (R57SZLJTHFLfQ7CUo4edsq)
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            child: Center(
+                                              child: TextButton(
+                                                onPressed: selectQuestion,
+                                                style: TextButton.styleFrom(
+                                                  padding: EdgeInsets.zero,
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            // largebutton9NB (I51:294;51:243)
-                                            padding: EdgeInsets.fromLTRB(24 * fem,
-                                                16 * fem, 7 * fem, 16 * fem),
-                                            width: 178 * fem,
-                                            height: 56 * fem,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(32 * fem),
-                                            ),
-                                            child: SizedBox(
-                                              // autogroupedsqbEB (R57SZLJTHFLfQ7CUo4edsq)
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              child: Center(
-                                                child: TextButton(
-                                                  onPressed: selectQuestion,
-                                                  style: TextButton.styleFrom(
-                                                    padding: EdgeInsets.zero,
-                                                  ),
-                                                  child: Text(
-                                                    'Choose Question',
-                                                    style: SafeGoogleFont(
-                                                      'Roboto',
-                                                      fontSize: 18 * ffem,
-                                                      fontWeight: FontWeight.w600,
-                                                      height:
-                                                          1.3333333333 * ffem / fem,
-                                                      letterSpacing: 0.54 * fem,
-                                                      color: const Color(0xff3a64f6),
-                                                    ),
+                                                child: Text(
+                                                  'Choose Question',
+                                                  style: SafeGoogleFont(
+                                                    'Roboto',
+                                                    fontSize: 18 * ffem,
+                                                    fontWeight: FontWeight.w600,
+                                                    height:
+                                                        1.3333333333 * ffem / fem,
+                                                    letterSpacing: 0.54 * fem,
+                                                    color: const Color(0xff3a64f6),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
+                                ]
                               ),
                             ),
                             Container(
                               // frame11DmM (51:295)
                               margin: EdgeInsets.fromLTRB(
-                                  63.5 * fem, 0 * fem, 64.5 * fem, 0 * fem),
+                                  63.5 * fem, 32 * fem, 64.5 * fem, 0 * fem),
                               width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,

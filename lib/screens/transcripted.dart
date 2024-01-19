@@ -1,20 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/screens/logo_widget.dart';
+import 'package:myapp/screens/submissions_widget.dart';
 
 class TranscriptedScene extends StatefulWidget {
   final String transcriptedAudio;
+  final int countFreeSubmissions;
+  final String question;
+  final String jobPosition;
+  final String company;
 
-  TranscriptedScene({required this.transcriptedAudio});
+  TranscriptedScene({
+    required this.transcriptedAudio,
+    required this.countFreeSubmissions,
+    required this.question,
+    required this.jobPosition,
+    required this.company,
+  });
 
   @override
   _TranscriptedScene createState() =>
-      _TranscriptedScene(transcriptedAudio: transcriptedAudio);
+      _TranscriptedScene(
+        transcriptedAudio: transcriptedAudio,
+        countFreeSubmissions: countFreeSubmissions,
+        question: question,
+        jobPosition: jobPosition,
+        company: company,
+      );
 }
 
 class _TranscriptedScene extends State<TranscriptedScene> {
   String transcriptedAudio;
+  int countFreeSubmissions;
+  String question;
+  String jobPosition;
+  String company;
 
-  _TranscriptedScene({required this.transcriptedAudio});
+  _TranscriptedScene({
+    required this.transcriptedAudio,
+    required this.countFreeSubmissions,
+    required this.question,
+    required this.jobPosition,
+    required this.company,
+  });
 
   @override
   void initState() {
@@ -23,145 +51,36 @@ class _TranscriptedScene extends State<TranscriptedScene> {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 390;
+    double baseWidth = 400;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Container(
         // WNf (135:3531)
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color(0xfff8f8f8),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              // autogroupxwhrY4T (R581WiiwKhMy2BVXoPXWhR)
-              padding:
-                  EdgeInsets.fromLTRB(20 * fem, 14 * fem, 17 * fem, 6 * fem),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xfff8f8f8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x33141414),
-                    offset: Offset(2 * fem, 4 * fem),
-                    blurRadius: 4 * fem,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    // autogroupixzrRrK (R581mDJnhYQkG1yJS4ixZR)
-                    width: double.infinity,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          // listYAF (135:3536)
-                          margin: EdgeInsets.fromLTRB(
-                              0 * fem, 0 * fem, 159 * fem, 0 * fem),
-                          width: 24 * fem,
-                          height: 18 * fem,
-                          child: Image.asset(
-                            'assets/screens/images/list-5hV.png',
-                            width: 24 * fem,
-                            height: 18 * fem,
-                          ),
-                        ),
-                        Container(
-                          // ors (135:3537)
-                          width: 170 * fem,
-                          height: 36 * fem,
-                          child: Image.asset(
-                            'assets/screens/images/-P9u.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Logo(baseWidth: baseWidth, fem: fem, ffem: ffem),
             Container(
               // autogroupomebJod (R582RhCfoYe8Nkh2wSoMEB)
               padding:
-                  EdgeInsets.fromLTRB(16 * fem, 16 * fem, 16 * fem, 40 * fem),
+                  EdgeInsets.fromLTRB(16 * fem, 16 * fem, 16 * fem, 16 * fem),
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    // frame3zgT (135:3533)
-                    margin: EdgeInsets.fromLTRB(
-                        0 * fem, 0 * fem, 0 * fem, 32 * fem),
-                    width: double.infinity,
-                    height: 40 * fem,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          // freesubmissions334wD (135:3534)
-                          left: 0 * fem,
-                          top: 8 * fem,
-                          child: Align(
-                            child: SizedBox(
-                              width: 175 * fem,
-                              height: 24 * fem,
-                              child: Text(
-                                'Free submissions: 3/3',
-                                style: SafeGoogleFont(
-                                  'Roboto',
-                                  fontSize: 16 * ffem,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.5 * ffem / fem,
-                                  letterSpacing: 0.8 * fem,
-                                  color: Color(0xff516177),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          // smallbutton4Zq (135:3535)
-                          left: 169 * fem,
-                          top: 0 * fem,
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(
-                                  16 * fem, 8 * fem, 0 * fem, 8 * fem),
-                              width: 189 * fem,
-                              height: 40 * fem,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff0f993f)),
-                                borderRadius: BorderRadius.circular(32 * fem),
-                              ),
-                              child: Text(
-                                'Upgrade to Premium',
-                                style: SafeGoogleFont(
-                                  'Roboto',
-                                  fontSize: 18 * ffem,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.3333333333 * ffem / fem,
-                                  letterSpacing: 0.54 * fem,
-                                  color: Color(0xff0f993f),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Submissions(
+                    baseWidth: baseWidth,
+                    fem: fem,
+                    ffem: ffem,
+                    countFreeSubmissions: countFreeSubmissions,
                   ),
-                  Container(
+                  SizedBox(
                     // frame2Bns (135:3554)
                     width: double.infinity,
                     child: Column(
@@ -183,7 +102,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                   fontSize: 32 * ffem,
                                   fontWeight: FontWeight.w400,
                                   height: 1.25 * ffem / fem,
-                                  color: Color(0xff171d25),
+                                  color: const Color(0xff171d25),
                                 ),
                               ),
                               SizedBox(
@@ -194,110 +113,67 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                 width: double.infinity,
                                 height: 112 * fem,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xfff0f0f0)),
-                                  color: Color(0x7ffdfdfd),
+                                  border: Border.all(color: const Color(0xfff0f0f0)),
+                                  color: const Color(0x7ffdfdfd),
                                   borderRadius: BorderRadius.circular(16 * fem),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Color(0x33141414),
+                                      color: const Color(0x33141414),
                                       offset: Offset(2 * fem, 4 * fem),
                                       blurRadius: 4 * fem,
                                     ),
                                   ],
                                 ),
-                                child: Stack(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Positioned(
-                                      // tellmeaboutatimewhenyouworkedo (135:3558)
-                                      left: 45 * fem,
-                                      top: 16 * fem,
-                                      child: Align(
-                                        child: SizedBox(
-                                          width: 268 * fem,
-                                          height: 72 * fem,
-                                          child: Text(
-                                            '“Tell me about a time when you worked on a project with a tight deadline”',
-                                            textAlign: TextAlign.center,
-                                            style: SafeGoogleFont(
-                                              'Roboto',
-                                              fontSize: 18 * ffem,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.3333333333 * ffem / fem,
-                                              letterSpacing: 0.54 * fem,
-                                              color: Color(0xff171d25),
-                                            ),
-                                          ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                        0 * fem,
+                                        16 * fem,
+                                        0 * fem,
+                                        16 * fem),
+                                      child: Text(
+                                        '$jobPosition at $company',
+                                        textAlign: TextAlign.center,
+                                        style: SafeGoogleFont(
+                                          'Roboto',
+                                          fontSize: 16 * ffem,
+                                          fontWeight:
+                                              FontWeight.w500,
+                                          height: 1 * ffem / fem,
+                                          letterSpacing: 0.8 * fem,
+                                          color: const Color(0xff516177),
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                      // frame27rJf (135:3559)
-                                      left: 139.5 * fem,
-                                      top: 72 * fem,
-                                      child: Container(
-                                        width: 206 * fem,
-                                        height: 24 * fem,
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              // softwareengineer8X5 (135:3560)
-                                              left: 0 * fem,
-                                              top: 4 * fem,
-                                              child: Align(
-                                                child: SizedBox(
-                                                  width: 145 * fem,
-                                                  height: 16 * fem,
-                                                  child: Text(
-                                                    'Software Engineer',
-                                                    textAlign: TextAlign.center,
-                                                    style: SafeGoogleFont(
-                                                      'Roboto',
-                                                      fontSize: 16 * ffem,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      height: 1 * ffem / fem,
-                                                      letterSpacing: 0.8 * fem,
-                                                      color: Color(0xff516177),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              // googleY51 (135:3561)
-                                              left: 138 * fem,
-                                              top: 0 * fem,
-                                              child: Align(
-                                                child: SizedBox(
-                                                  width: 68 * fem,
-                                                  height: 24 * fem,
-                                                  child: Text(
-                                                    '(Google)',
-                                                    textAlign: TextAlign.center,
-                                                    style: SafeGoogleFont(
-                                                      'Roboto',
-                                                      fontSize: 16 * ffem,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      height: 1.5 * ffem / fem,
-                                                      letterSpacing: 0.8 * fem,
-                                                      color: Color(0xff516177),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(0 * fem,
+                                          0 * fem, 0 * fem, 16 * fem),
+                                      width: double.infinity,
+                                      constraints: BoxConstraints(
+                                        maxWidth: 324 * fem,
+                                      ),
+                                      child: Text(
+                                        '“$question”',
+                                        textAlign: TextAlign.center,
+                                        style: SafeGoogleFont(
+                                          'Roboto',
+                                          fontSize: 18 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.3333333333 * ffem / fem,
+                                          letterSpacing: 0.54 * fem,
+                                          color: const Color(0xff171d25),
                                         ),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ),
                               SizedBox(
                                 height: 16 * fem,
                               ),
-                              Container(
+                              SizedBox(
                                 // frame29Kh (135:3562)
                                 width: double.infinity,
                                 child: Column(
@@ -315,11 +191,11 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                           fontWeight: FontWeight.w500,
                                           height: 1 * ffem / fem,
                                           letterSpacing: 0.8 * fem,
-                                          color: Color(0xff171d25),
+                                          color: const Color(0xff171d25),
                                         ),
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // frame31K7h (135:3564)
                                       width: double.infinity,
                                       child: Column(
@@ -339,7 +215,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                             height: 286 * fem,
                                             decoration: BoxDecoration(
                                               border: Border.all(
-                                                  color: Color(0xff3a64f6)),
+                                                  color: const Color(0xff3a64f6)),
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       8 * fem),
@@ -367,7 +243,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                           FontWeight.w400,
                                                       height: 1.5 * ffem / fem,
                                                       letterSpacing: 0.8 * fem,
-                                                      color: Color(0xff171d25),
+                                                      color: const Color(0xff171d25),
                                                     ),
                                                   ),
                                                 ),
@@ -389,7 +265,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: [
-                                                      Container(
+                                                      SizedBox(
                                                         // notchesn59 (135:3569)
                                                         width: 11.5 * fem,
                                                         height: 11.5 * fem,
@@ -405,7 +281,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                               ],
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             // frame1GFD (135:3570)
                                             width: double.infinity,
                                             height: 32 * fem,
@@ -449,7 +325,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                         letterSpacing:
                                                             0.54 * fem,
                                                         color:
-                                                            Color(0xff3a64f6),
+                                                            const Color(0xff3a64f6),
                                                       ),
                                                     ),
                                                   ),
@@ -463,7 +339,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                     fontSize: 12 * ffem,
                                                     fontWeight: FontWeight.w400,
                                                     height: 1 * ffem / fem,
-                                                    color: Color(0xff516177),
+                                                    color: const Color(0xff516177),
                                                   ),
                                                 ),
                                               ],
@@ -502,7 +378,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                     height: double.infinity,
                                     decoration: BoxDecoration(
                                       border:
-                                          Border.all(color: Color(0xff3a64f6)),
+                                          Border.all(color: const Color(0xff3a64f6)),
                                       borderRadius:
                                           BorderRadius.circular(32 * fem),
                                     ),
@@ -531,7 +407,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                             fontWeight: FontWeight.w600,
                                             height: 1.3333333333 * ffem / fem,
                                             letterSpacing: 0.54 * fem,
-                                            color: Color(0xff3a64f6),
+                                            color: const Color(0xff3a64f6),
                                           ),
                                         ),
                                       ],
@@ -550,7 +426,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                       16 * fem, 17 * fem, 16 * fem),
                                   height: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Color(0xff3a64f6),
+                                    color: const Color(0xff3a64f6),
                                     borderRadius:
                                         BorderRadius.circular(32 * fem),
                                   ),
@@ -579,7 +455,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                           fontWeight: FontWeight.w600,
                                           height: 1.3333333333 * ffem / fem,
                                           letterSpacing: 0.54 * fem,
-                                          color: Color(0xfff8f8f8),
+                                          color: const Color(0xfff8f8f8),
                                         ),
                                       ),
                                     ],
