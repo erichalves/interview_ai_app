@@ -368,7 +368,10 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                 margin: EdgeInsets.fromLTRB(
                                     0 * fem, 0 * fem, 16 * fem, 0 * fem),
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(null); // This will return to the previous screen
+                                  },
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
                                   ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:ui';
 import 'package:myapp/utils.dart';
 import 'package:myapp/functions/audio_recorder.dart';
 import 'package:myapp/functions/api_service.dart';
@@ -17,7 +16,7 @@ class Scene extends StatefulWidget {
 
 enum RecordingState { standBy, recording, completed, discardWarning, transcribing }
 
-class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
+class _Scene extends State<Scene> with TickerProviderStateMixin  {
   int _countFreeSubmissions = 0;
   RecordingState _recordingState = RecordingState.standBy;
   final RecordingManager _recordingManager = RecordingManager();
@@ -48,6 +47,9 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
+    apiService.getUsedQuestionsCount().then((value) {
+      _countFreeSubmissions = value;
+    }).catchError((error) {}); // do nothing
   }
 
   void updateQuestion() {
@@ -108,8 +110,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
       _recordingState = RecordingState.transcribing;
     });
     try {
-      _controller; // Controller already defined, moving on...
-      return;
+      _controller.dispose(); // Controller already defined, moving on...
     } catch (e) {
       // Do nothing
     }
@@ -152,7 +153,9 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
   }
 
   void _endTranscription(String transcriptedAudio) {
-    _recordingState = RecordingState.completed;
+    setState(() {
+      _recordingState = RecordingState.completed;
+    });
     _controller.dispose();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Scaffold(
@@ -599,15 +602,6 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
     }
     throw Exception("State not defined");
   }
-
-  void _incrementSubmissionCounter() {
-    setState(() {
-      //TODO: update a database
-      _countFreeSubmissions = _countFreeSubmissions + 1;
-    });
-  }
-
-  void _openNewPositionScreen() {}
 
   @override
   Widget build(BuildContext context) {
