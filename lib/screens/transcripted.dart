@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/screens/logo_widget.dart';
 import 'package:myapp/screens/submissions_widget.dart';
+import 'package:myapp/functions/api_service.dart';
 
 class TranscriptedScene extends StatefulWidget {
   final String transcriptedAudio;
   final int countFreeSubmissions;
   final String question;
+  final int questionId;
   final String jobPosition;
   final String company;
 
@@ -14,6 +16,7 @@ class TranscriptedScene extends StatefulWidget {
     required this.transcriptedAudio,
     required this.countFreeSubmissions,
     required this.question,
+    required this.questionId,
     required this.jobPosition,
     required this.company,
   });
@@ -24,6 +27,7 @@ class TranscriptedScene extends StatefulWidget {
         transcriptedAudio: transcriptedAudio,
         countFreeSubmissions: countFreeSubmissions,
         question: question,
+        questionId: questionId,
         jobPosition: jobPosition,
         company: company,
       );
@@ -33,14 +37,17 @@ class _TranscriptedScene extends State<TranscriptedScene> {
   String transcriptedAudio;
   int countFreeSubmissions;
   String question;
+  int questionId;
   String jobPosition;
   String company;
+  ApiService apiService = ApiService();
   late TextEditingController _textController;
 
   _TranscriptedScene({
     required this.transcriptedAudio,
     required this.countFreeSubmissions,
     required this.question,
+    required this.questionId,
     required this.jobPosition,
     required this.company,
   });
@@ -55,6 +62,20 @@ class _TranscriptedScene extends State<TranscriptedScene> {
   void dispose() {
     _textController.dispose();
     super.dispose();
+  }
+
+  void submitAnswer() {
+    apiService.submitTranscription(questionId, question, _textController.text).then((value) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Scaffold(
+          body: SingleChildScrollView(
+            child: TranscriptedScene(
+              evaluationText: value,
+            )
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -427,7 +448,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                               ),
                               TextButton(
                                 // largebuttonwpX (135:3594)
-                                onPressed: () {},
+                                onPressed: submitAnswer,
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                 ),
