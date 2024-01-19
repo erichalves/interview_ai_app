@@ -35,6 +35,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
   String question;
   String jobPosition;
   String company;
+  late TextEditingController _textController;
 
   _TranscriptedScene({
     required this.transcriptedAudio,
@@ -47,6 +48,13 @@ class _TranscriptedScene extends State<TranscriptedScene> {
   @override
   void initState() {
     super.initState();
+    _textController = TextEditingController(text: transcriptedAudio);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -230,7 +238,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                     maxWidth: 327 * fem,
                                                   ),
                                                   child: TextField(
-                                                    controller: TextEditingController(text: transcriptedAudio),
+                                                    controller: _textController,
                                                     style: SafeGoogleFont(
                                                       'Roboto',
                                                       fontSize: 16 * ffem,
