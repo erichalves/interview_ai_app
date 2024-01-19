@@ -49,6 +49,9 @@ dependencies:
   # Path generator
   path_provider: ^2.0.5
 
+  # Logging
+  logging: ^1.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

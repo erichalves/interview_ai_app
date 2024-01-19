@@ -14,10 +14,10 @@ class Logo extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(20 * fem, 14 * fem, 17 * fem, 6 * fem),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Color(0xfff8f8f8),
+        color: const Color(0xfff8f8f8),
         boxShadow: [
           BoxShadow(
-            color: Color(0x33141414),
+            color: const Color(0x33141414),
             offset: Offset(2 * fem, 4 * fem),
             blurRadius: 4 * fem,
           ),
@@ -26,7 +26,7 @@ class Logo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             // autogroupze4sLqR (R57RFndzu3LWFeq4UYze4s)
             width: double.infinity,
             child: Row(
@@ -38,13 +38,14 @@ class Logo extends StatelessWidget {
                       EdgeInsets.fromLTRB(0 * fem, 0 * fem, 159 * fem, 0 * fem),
                   width: 24 * fem,
                   height: 18 * fem,
-                  child: Image.asset(
-                    'assets/screens/images/list-5hV.png',
-                    width: 24 * fem,
-                    height: 18 * fem,
-                  ),
+                  child: const SizedBox(),
+                  // .asset(
+                  //   'assets/screens/images/list-5hV.png',
+                  //   width: 24 * fem,
+                  //   height: 18 * fem,
+                  // ),
                 ),
-                Container(
+                SizedBox(
                   // H8P (51:305)
                   width: 170 * fem,
                   height: 36 * fem,

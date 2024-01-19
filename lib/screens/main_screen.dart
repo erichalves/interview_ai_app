@@ -23,19 +23,32 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
   final RecordingManager _recordingManager = RecordingManager();
   final int _recommendedTime = 3 * 60; //time in seconds
   final int _maxTime = 5 * 60;
-  final bool _isPremiumUser = false;
+  bool _isPremiumUser = false;
   Timer? _timer;
   int _timerCount = 0;
   ApiService apiService = ApiService();
-  int questionId = 1;
+  int questionId = 0;
   String question =
       "Tell me about a time when you worked on a project with a tight deadline.";
   late AnimationController _controller;
-  int _repeatCount = 0;
+  final int waitLimit = 15;
 
   @override
   void initState() {
     super.initState();
+    updateQuestion();
+    apiService.isUserPremium().then((value) {
+      _isPremiumUser = value;
+    }).catchError((error) {
+      final snackBar = SnackBar(
+        content: Text('Error obtaining user status: $error'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+  }
+
+  void updateQuestion() {
     apiService.fetchQuestions(questionId: questionId).then(
       (value) {
         setState(() {
@@ -84,10 +97,6 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
     });
   }
 
-  void timeout() {
-    // Answer from whisper timed out
-  }
-
   void _startTranscription(BuildContext context) {
     setState(() {
       _recordingState = RecordingState.transcribing;
@@ -104,12 +113,9 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
     )
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          _repeatCount++;
-          if (_repeatCount < 5) {
-            _controller.forward(
-                from: 0.0); // Restart the animation from the beginning
-          } else {
-            timeout();
+          if (_recordingState == RecordingState.transcribing) {
+            _controller.forward(from: 0.0); 
+            // Restart the animation from the beginning
           }
         }
       })
@@ -117,8 +123,25 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
 
     apiService
         .uploadAndGetTranscription(
-            question, _recordingManager.getRecordingPath())
-        .then((transcriptedAudio) => _endTranscription(transcriptedAudio));
+            question, _recordingManager.getRecordingPath(), waitLimit)
+        .then((transcriptedAudio) => _endTranscription(transcriptedAudio)).catchError(
+          (error) {
+             // Update global variable with error message
+            String globalErrorMessage = error.toString();
+
+            // Display the error message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(globalErrorMessage),
+                backgroundColor: Colors.red,
+              ),
+            );
+
+            setState(() {
+              _recordingState = RecordingState.completed;
+            });
+          }
+        );
   }
 
   void _endTranscription(String transcriptedAudio) {
@@ -132,9 +155,9 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
   void discardAudioReply(bool discard) {
     setState(() {
       if(discard){
-        _recordingState = RecordingState.completed;
-      } else {
         _recordingState = RecordingState.standBy;
+      } else {
+        _recordingState = RecordingState.completed;
       }
     });
   }
@@ -358,7 +381,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                               width: 19.5 * fem * 1.3,
                               height: 18.75 * fem * 1.3));
                     })),
-            Container(
+            SizedBox(
               // autogroupyzlsMz3 (R58nU1esJ7XkscbzvnYzLs)
               width: 130 * fem,
               height: double.infinity,
@@ -371,7 +394,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                     fontWeight: FontWeight.w600,
                     height: 1.3333333333 * ffem / fem,
                     letterSpacing: 0.54 * fem,
-                    color: Color(0xff516177),
+                    color: const Color(0xff516177),
                   ),
                 ),
               ),
@@ -390,14 +413,28 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
   ) {
     if (recordingState == RecordingState.standBy) {
       return TextButton(
-        onPressed: () {},
+        onPressed: () {
+          if (_isPremiumUser  | (questionId < 4)) {
+            questionId++;
+            updateQuestion();
+          } else if (!_isPremiumUser) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Free users have only 5 questions available to them"),
+                backgroundColor: Colors.green,
+              ),
+            );
+            questionId = 0;
+            updateQuestion();
+          }
+        },
         child: Container(
           // smallbuttonuT9 (51:290)
           padding: EdgeInsets.fromLTRB(5 * fem, 8 * fem, 5 * fem, 8 * fem),
           width: 150 * fem,
           height: 40 * fem,
           decoration: BoxDecoration(
-            border: Border.all(color: Color(0xff3a64f6)),
+            border: Border.all(color: const Color(0xff3a64f6)),
             borderRadius: BorderRadius.circular(32 * fem),
           ),
           child: Container(
@@ -447,7 +484,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                       27 * fem, 16 * fem, 16 * fem, 16 * fem),
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xff891a1e)),
+                    border: Border.all(color: const Color(0xff891a1e)),
                     borderRadius: BorderRadius.circular(32 * fem),
                   ),
                   child: Row(
@@ -504,7 +541,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                     EdgeInsets.fromLTRB(27 * fem, 16 * fem, 19 * fem, 16 * fem),
                 height: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xff3a64f6),
+                  color: const Color(0xff3a64f6),
                   borderRadius: BorderRadius.circular(32 * fem),
                 ),
                 child: Row(
@@ -531,7 +568,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                         fontWeight: FontWeight.w600,
                         height: 1.3333333333 * ffem / fem,
                         letterSpacing: 0.54 * fem,
-                        color: Color(0xfff8f8f8),
+                        color: const Color(0xfff8f8f8),
                       ),
                     ),
                   ],
@@ -559,12 +596,12 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
     double baseWidth = 400;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Container(
         // 45y (51:288)
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color(0xfff8f8f8),
         ),
         child: Stack(
@@ -873,7 +910,7 @@ class _Scene extends State<Scene> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            _recordingState == RecordingState.discardWarning ? BlurredEffect() : const SizedBox(),
+            _recordingState == RecordingState.discardWarning ? const BlurredEffect() : const SizedBox(),
             _recordingState == RecordingState.discardWarning ? DiscardWarning(discardReplyFunction: discardAudioReply) : const SizedBox()
           ]
         )

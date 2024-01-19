@@ -18,7 +18,7 @@ void main() {
       var question =
           "Tell me about a time when you worked on a project with a tight deadline.";
       final result =
-          await apiService.uploadAndGetTranscription(question, audioFile);
+          await apiService.uploadAndGetTranscription(question, audioFile, 15);
       var expected = "I have never had such experiences in my life. I'm sorry.";
       expect(ratio(expected, result) > 75, true);
     });

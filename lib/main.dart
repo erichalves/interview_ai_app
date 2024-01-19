@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/screens/main_screen.dart';
 // import 'package:myapp/screens/b.dart';
@@ -32,7 +33,16 @@ import 'package:myapp/screens/main_screen.dart';
 // import 'package:myapp/color-palette/colors.dart';
 // import 'package:myapp/color-palette/components.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // Configure logger
+  Logger.root.level = Level.ALL; // Set this to desired level
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
+  // Run your app
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

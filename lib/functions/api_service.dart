@@ -78,7 +78,7 @@ class ApiService {
   }
 
   Future<String> uploadAndGetTranscription(
-      String question, String audioPath) async {
+      String question, String audioPath, int waitLimit) async {
     var request =
         http.MultipartRequest('POST', Uri.parse('$baseUrl/upload-audio'));
 
@@ -90,7 +90,13 @@ class ApiService {
     request.fields['user_id'] = await getDeviceId();
     request.fields['question'] = question;
 
-    var streamedResponse = await request.send();
+    var streamedResponse = await request.send().timeout(
+      Duration(seconds: waitLimit), // Set your desired timeout duration here
+      onTimeout: () {
+        // Handle timeout, e.g., by throwing an exception
+        throw Exception('Request to server timed out');
+      },
+    );
     if (streamedResponse.statusCode == 200) {
       var responseBody = await streamedResponse.stream.bytesToString();
       var jsonResponse = jsonDecode(responseBody);
