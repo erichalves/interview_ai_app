@@ -1,218 +1,176 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'dart:ui';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/screens/logo_widget.dart';
+import 'package:myapp/screens/submissions_widget.dart';
 
-class Scene extends StatelessWidget {
+class Result extends StatelessWidget {
+  final double baseWidth;
+  final double fem;
+  final double ffem;
+
+  final String title;
+  final double stars;
+  final String text;
+
+  const Result({
+    Key? key,
+    required this.baseWidth,
+    required this.fem,
+    required this.ffem,
+    required this.title,
+    required this.stars,
+    required this.text,
+  }) : super(key: key);
+
+  List<Widget> starsWidget(double numberOfStars) {
+    List<Widget> result = [];
+    double remaining = numberOfStars;
+
+    for (int i = 0; i < 9; i++) {
+      if (i % 2 == 0) {
+        String starImage = 'starempty';
+        if(remaining >= 1) {
+          starImage = 'star';
+          remaining -= 1;
+        } else if (remaining >= 0) {
+          starImage = 'starhalf';
+          remaining = 0;
+        }
+        result.add(
+          SizedBox(
+            width: 28*fem,
+            height: 26.6*fem,
+            child: Image.asset(
+              'assets/screens/images/$starImage.png',
+              width: 28*fem,
+              height: 26.6*fem,
+            ),
+          )
+        );
+      } else {
+        result.add(
+          SizedBox(
+            width: 8*fem,
+          ),
+        );
+      }
+    }
+
+    return result;
+  }
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 14*fem, 16*fem),
+      width: double.infinity,
+      decoration: BoxDecoration (
+        color: const Color(0x7ffdfdfd),
+        borderRadius: BorderRadius.circular(16*fem),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x33141414),
+            offset: Offset(2*fem, 4*fem),
+            blurRadius: 4*fem,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            // frame1MzT (I93:923;93:1049)
+            margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 2*fem, 16*fem),
+            width: double.infinity,
+            height: 32*fem,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 40*fem, 0*fem),
+                  child: Text(
+                    title,
+                    style: SafeGoogleFont (
+                      'Roboto',
+                      fontSize: 20*ffem,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2*ffem/fem,
+                      color: const Color(0xff171d25),
+                    ),
+                  ),
+                ),
+                Container(
+                  // frame4hwq (I93:923;93:750)
+                  padding: EdgeInsets.fromLTRB(2.46*fem, 2.14*fem, 1.54*fem, 3.26*fem),
+                  height: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: starsWidget(stars),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            // youansweredthequestionanprovid (I93:923;93:761)
+            constraints: BoxConstraints (
+              maxWidth: 328*fem,
+            ),
+            child: Text(
+              text,
+              style: SafeGoogleFont (
+                'Roboto',
+                fontSize: 16*ffem,
+                fontWeight: FontWeight.w400,
+                height: 1.5*ffem/fem,
+                letterSpacing: 0.8*fem,
+                color: const Color(0xff516177),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  } 
+}
+
+class AnswerResults extends StatelessWidget {
+  final String evaluationText;
+  final int countFreeSubmissions;
+
+  const AnswerResults({Key? key, required this.evaluationText, required this.countFreeSubmissions}): super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 390;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
+
+    return SizedBox(
       width: double.infinity,
       child: Container(
         // f5V (93:574)
         width: double.infinity,
-        decoration: BoxDecoration (
+        decoration: const BoxDecoration (
           color: Color(0xfff8f8f8),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              // autogroupnatsksd (R585cSEBDMCENTKgYHnats)
-              padding: EdgeInsets.fromLTRB(20*fem, 14*fem, 17*fem, 6*fem),
-              width: double.infinity,
-              decoration: BoxDecoration (
-                color: Color(0xfff8f8f8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x33141414),
-                    offset: Offset(2*fem, 4*fem),
-                    blurRadius: 4*fem,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    // frame1mXq (93:581)
-                    margin: EdgeInsets.fromLTRB(15*fem, 0*fem, 18*fem, 28*fem),
-                    width: double.infinity,
-                    height: 22*fem,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          // Dej (93:582)
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 237*fem, 0*fem),
-                            child: Text(
-                              '9:30',
-                              textAlign: TextAlign.center,
-                              style: SafeGoogleFont (
-                                'Source Sans Pro',
-                                fontSize: 14*ffem,
-                                fontWeight: FontWeight.w700,
-                                height: 1.5714285714*ffem/fem,
-                                color: Color(0xff171d25),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          // frame1qg7 (93:583)
-                          margin: EdgeInsets.fromLTRB(0*fem, 3*fem, 0*fem, 3*fem),
-                          height: double.infinity,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // cellsignalnone7dd (93:584)
-                                width: 16*fem,
-                                height: 16*fem,
-                                child: Image.asset(
-                                  'REPLACE_IMAGE:93:584',
-                                  width: 16*fem,
-                                  height: 16*fem,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4*fem,
-                              ),
-                              Container(
-                                // wifihighmiB (93:587)
-                                width: 16*fem,
-                                height: 16*fem,
-                                child: Image.asset(
-                                  'REPLACE_IMAGE:93:587',
-                                  width: 16*fem,
-                                  height: 16*fem,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4*fem,
-                              ),
-                              Container(
-                                // batteryemptyqCF (93:593)
-                                width: 16*fem,
-                                height: 16*fem,
-                                child: Image.asset(
-                                  'REPLACE_IMAGE:93:593',
-                                  width: 16*fem,
-                                  height: 16*fem,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    // autogroupc3xzuT1 (R585qgM7LK1mi6d4Koc3XZ)
-                    width: double.infinity,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          // listpK5 (93:579)
-                          margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 159*fem, 0*fem),
-                          width: 24*fem,
-                          height: 18*fem,
-                          child: Image.asset(
-                            'REPLACE_IMAGE:93:579',
-                            width: 24*fem,
-                            height: 18*fem,
-                          ),
-                        ),
-                        Container(
-                          // UuR (93:580)
-                          width: 170*fem,
-                          height: 36*fem,
-                          child: Image.asset(
-                            'assets/screens/images/-jw1.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Logo(baseWidth: baseWidth, fem: fem, ffem: ffem),
             Container(
               // autogroupyuwpNzo (R586SQrEffZS8FocHhYUWP)
               padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 16*fem, 40*fem),
               width: double.infinity,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    // frame34Mq (93:576)
-                    margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 30*fem),
-                    width: double.infinity,
-                    height: 40*fem,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          // freesubmissions239PH (93:577)
-                          left: 0*fem,
-                          top: 8*fem,
-                          child: Align(
-                            child: SizedBox(
-                              width: 175*fem,
-                              height: 24*fem,
-                              child: Text(
-                                'Free submissions: 2/3',
-                                style: SafeGoogleFont (
-                                  'Roboto',
-                                  fontSize: 16*ffem,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.5*ffem/fem,
-                                  letterSpacing: 0.8*fem,
-                                  color: Color(0xff516177),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          // smallbuttonwa3 (93:578)
-                          left: 169*fem,
-                          top: 0*fem,
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom (
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(16*fem, 8*fem, 0*fem, 8*fem),
-                              width: 189*fem,
-                              height: 40*fem,
-                              decoration: BoxDecoration (
-                                border: Border.all(color: Color(0xff0f993f)),
-                                borderRadius: BorderRadius.circular(32*fem),
-                              ),
-                              child: Text(
-                                'Upgrade to Premium',
-                                style: SafeGoogleFont (
-                                  'Roboto',
-                                  fontSize: 18*ffem,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.3333333333*ffem/fem,
-                                  letterSpacing: 0.54*fem,
-                                  color: Color(0xff0f993f),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Submissions(
+                    baseWidth: baseWidth,
+                    fem: fem,
+                    ffem: ffem,
+                    countFreeSubmissions: countFreeSubmissions,
                   ),
                   Container(
                     // frame32Dvs (93:1115)
@@ -231,11 +189,11 @@ class Scene extends StatelessWidget {
                               fontSize: 32*ffem,
                               fontWeight: FontWeight.w400,
                               height: 1.25*ffem/fem,
-                              color: Color(0xff171d25),
+                              color: const Color(0xff171d25),
                             ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           // frame9KsR (93:1019)
                           width: double.infinity,
                           child: Column(
@@ -246,11 +204,11 @@ class Scene extends StatelessWidget {
                                 padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 16*fem, 16*fem),
                                 width: double.infinity,
                                 decoration: BoxDecoration (
-                                  color: Color(0x7ffdfdfd),
+                                  color: const Color(0x7ffdfdfd),
                                   borderRadius: BorderRadius.circular(16*fem),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Color(0x33141414),
+                                      color: const Color(0x33141414),
                                       offset: Offset(2*fem, 4*fem),
                                       blurRadius: 4*fem,
                                     ),
@@ -738,56 +696,6 @@ class Scene extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Container(
-                                // smallbuttonNuR (129:1734)
-                                margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 202*fem, 0*fem),
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom (
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(3.75*fem, 8*fem, 0*fem, 8*fem),
-                                    width: double.infinity,
-                                    height: 40*fem,
-                                    decoration: BoxDecoration (
-                                      borderRadius: BorderRadius.circular(32*fem),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          // caretdownAKV (I129:1734;51:81)
-                                          margin: EdgeInsets.fromLTRB(0*fem, 1.5*fem, 11.75*fem, 0*fem),
-                                          width: 16.5*fem,
-                                          height: 9*fem,
-                                          child: Image.asset(
-                                            'REPLACE_IMAGE:I129:1734;51:81',
-                                            width: 16.5*fem,
-                                            height: 9*fem,
-                                          ),
-                                        ),
-                                        Container(
-                                          // autogroup5g27QzX (R587jnrJUxLE5tHNm85g27)
-                                          width: 141.5*fem,
-                                          height: double.infinity,
-                                          child: Text(
-                                            'Example answer',
-                                            style: SafeGoogleFont (
-                                              'Roboto',
-                                              fontSize: 18*ffem,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.3333333333*ffem/fem,
-                                              letterSpacing: 0.54*fem,
-                                              color: Color(0xff3a64f6),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -805,10 +713,10 @@ class Scene extends StatelessWidget {
                       width: 155*fem,
                       height: 56*fem,
                       decoration: BoxDecoration (
-                        color: Color(0xff3a64f6),
+                        color: const Color(0xff3a64f6),
                         borderRadius: BorderRadius.circular(32*fem),
                       ),
-                      child: Container(
+                      child: SizedBox(
                         // autogroupgbjkGfM (R586vKDQjPf7tZUQYygBJK)
                         width: double.infinity,
                         height: double.infinity,
@@ -821,7 +729,7 @@ class Scene extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               height: 1.3333333333*ffem/fem,
                               letterSpacing: 0.54*fem,
-                              color: Color(0xfff8f8f8),
+                              color: const Color(0xfff8f8f8),
                             ),
                           ),
                         ),

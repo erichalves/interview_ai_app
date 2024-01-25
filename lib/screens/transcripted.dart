@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/screens/logo_widget.dart';
 import 'package:myapp/screens/submissions_widget.dart';
+import 'package:myapp/screens/answer_results.dart';
 import 'package:myapp/functions/api_service.dart';
 
 class TranscriptedScene extends StatefulWidget {
@@ -69,12 +70,13 @@ class _TranscriptedScene extends State<TranscriptedScene> {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Scaffold(
           body: SingleChildScrollView(
-            child: TranscriptedScene(
+            child: AnswerResults(
               evaluationText: value,
+              countFreeSubmissions: countFreeSubmissions,
             )
           ),
         ),
-      );
+      ));
     });
   }
 

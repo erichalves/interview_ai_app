@@ -219,7 +219,7 @@ class Scene extends StatelessWidget {
                           // heresyourresult1as (129:1606)
                           margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 32*fem),
                           child: Text(
-                            'Here’s your result:',
+                            "Here's your result:",
                             style: SafeGoogleFont (
                               'Squada One',
                               fontSize: 32*ffem,

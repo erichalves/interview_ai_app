@@ -164,6 +164,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
               transcriptedAudio: transcriptedAudio,
               countFreeSubmissions: _countFreeSubmissions,
               question: question,
+              questionId: questionId,
               jobPosition: jobPosition,
               company: company,
             )
