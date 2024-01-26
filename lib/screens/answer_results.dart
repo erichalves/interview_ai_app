@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/functions/utils.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/screens/logo_widget.dart';
 import 'package:myapp/screens/submissions_widget.dart';
@@ -141,11 +142,42 @@ class AnswerResults extends StatelessWidget {
 
   const AnswerResults({Key? key, required this.evaluationText, required this.countFreeSubmissions}): super(key: key);
 
+  List<Widget> genResultsList(List<Map<String, dynamic>> evaluation, double baseWidth, double fem, double ffem) {
+    List<Widget> result = [];
+    int resultSize = 2 * evaluation.length - 1;
+
+    for (int i = 0; i < resultSize; i++) {
+      if (i % 2 == 0) {
+        int evalIndex = (i/2).floor();
+        result.add(
+          Result(
+            baseWidth: baseWidth,
+            fem: fem,
+            ffem: ffem,
+            title: evaluation[evalIndex]['criterion'],
+            stars: evaluation[evalIndex]['stars'],
+            text: evaluation[evalIndex]['evaluation'],
+          )
+        );
+      } else {
+        result.add(
+          SizedBox(
+            height: 16*fem,
+          ),
+        );
+      }
+    }
+
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 390;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+
+    List<Map<String, dynamic>> evaluationList = Utils.parseServerEvaluation(evaluationText);
 
     return SizedBox(
       width: double.infinity,
@@ -183,7 +215,7 @@ class AnswerResults extends StatelessWidget {
                           // heresyourresultJhR (93:635)
                           margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 32*fem),
                           child: Text(
-                            'Here’s your result:',
+                            'Here`s your result:',
                             style: SafeGoogleFont (
                               'Squada One',
                               fontSize: 32*ffem,
@@ -198,458 +230,7 @@ class AnswerResults extends StatelessWidget {
                           width: double.infinity,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // frame13ddD (93:1005)
-                                padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 16*fem, 16*fem),
-                                width: double.infinity,
-                                decoration: BoxDecoration (
-                                  color: const Color(0x7ffdfdfd),
-                                  borderRadius: BorderRadius.circular(16*fem),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0x33141414),
-                                      offset: Offset(2*fem, 4*fem),
-                                      blurRadius: 4*fem,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      // frame1FuV (I93:1005;93:1049)
-                                      margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 8*fem),
-                                      width: double.infinity,
-                                      height: 32*fem,
-                                      child: Text(
-                                        'Answered question?',
-                                        style: SafeGoogleFont (
-                                          'Roboto',
-                                          fontSize: 20*ffem,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.2*ffem/fem,
-                                          color: Color(0xff171d25),
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      // youansweredthequestionanprovid (I93:1005;93:761)
-                                      'Yes',
-                                      style: SafeGoogleFont (
-                                        'Roboto',
-                                        fontSize: 16*ffem,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.5*ffem/fem,
-                                        letterSpacing: 0.8*fem,
-                                        color: Color(0xff516177),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 16*fem,
-                              ),
-                              Container(
-                                // frame10XkX (93:923)
-                                padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 14*fem, 16*fem),
-                                width: double.infinity,
-                                decoration: BoxDecoration (
-                                  color: Color(0x7ffdfdfd),
-                                  borderRadius: BorderRadius.circular(16*fem),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color(0x33141414),
-                                      offset: Offset(2*fem, 4*fem),
-                                      blurRadius: 4*fem,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      // frame1MzT (I93:923;93:1049)
-                                      margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 2*fem, 16*fem),
-                                      width: double.infinity,
-                                      height: 32*fem,
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            // correctnessT1u (I93:923;93:749)
-                                            margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 40*fem, 0*fem),
-                                            child: Text(
-                                              'Correctness',
-                                              style: SafeGoogleFont (
-                                                'Roboto',
-                                                fontSize: 20*ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.2*ffem/fem,
-                                                color: Color(0xff171d25),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            // frame4hwq (I93:923;93:750)
-                                            padding: EdgeInsets.fromLTRB(2.46*fem, 2.14*fem, 1.54*fem, 3.26*fem),
-                                            height: double.infinity,
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  // starNo5 (I93:923;93:819)
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:923;93:819',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 8*fem,
-                                                ),
-                                                Container(
-                                                  // starRWT (I93:923;93:843)
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:923;93:843',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 8*fem,
-                                                ),
-                                                Container(
-                                                  // start99 (I93:923;93:871)
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:923;93:871',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 8*fem,
-                                                ),
-                                                Container(
-                                                  // starA6f (I93:923;93:879)
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:923;93:879',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 8*fem,
-                                                ),
-                                                Container(
-                                                  // starDqd (I93:923;93:889)
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:923;93:889',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      // youansweredthequestionanprovid (I93:923;93:761)
-                                      constraints: BoxConstraints (
-                                        maxWidth: 328*fem,
-                                      ),
-                                      child: Text(
-                                        'You answered the question an provided a good example.',
-                                        style: SafeGoogleFont (
-                                          'Roboto',
-                                          fontSize: 16*ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.5*ffem/fem,
-                                          letterSpacing: 0.8*fem,
-                                          color: Color(0xff516177),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 16*fem,
-                              ),
-                              Container(
-                                // frame11ivo (93:937)
-                                padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 16*fem, 16*fem),
-                                width: double.infinity,
-                                decoration: BoxDecoration (
-                                  color: Color(0x7ffdfdfd),
-                                  borderRadius: BorderRadius.circular(16*fem),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color(0x33141414),
-                                      offset: Offset(2*fem, 4*fem),
-                                      blurRadius: 4*fem,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      // frame1ksV (I93:937;93:1049)
-                                      margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 16*fem),
-                                      width: double.infinity,
-                                      height: 32*fem,
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            // correctnessr9q (I93:937;93:749)
-                                            margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 21*fem, 0*fem),
-                                            child: Text(
-                                              'Overall quality',
-                                              style: SafeGoogleFont (
-                                                'Roboto',
-                                                fontSize: 20*ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.2*ffem/fem,
-                                                color: Color(0xff171d25),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            // frame4hgF (I93:937;93:750)
-                                            padding: EdgeInsets.fromLTRB(2.46*fem, 2*fem, 2*fem, 3.23*fem),
-                                            height: double.infinity,
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  // starmRD (I93:937;93:819)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.1*fem, 8*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:937;93:819',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // starqfy (I93:937;93:843)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.1*fem, 8*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:937;93:843',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // starufq (I93:937;93:871)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.1*fem, 7.86*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:937;93:871',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // starhalfBNT (I93:937;93:879)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.17*fem, 7.68*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:937;93:879',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // stare19 (I93:937;93:889)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 0.17*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:937;93:889',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      // youansweredthequestionanprovid (I93:937;93:761)
-                                      constraints: BoxConstraints (
-                                        maxWidth: 326*fem,
-                                      ),
-                                      child: Text(
-                                        'You were concise and used no filler or unprofessional words, but you could have been more specific about the task and action taken. Overall, good job!',
-                                        style: SafeGoogleFont (
-                                          'Roboto',
-                                          fontSize: 16*ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.5*ffem/fem,
-                                          letterSpacing: 0.8*fem,
-                                          color: Color(0xff516177),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 16*fem,
-                              ),
-                              Container(
-                                // frame12qE3 (93:951)
-                                padding: EdgeInsets.fromLTRB(16*fem, 16*fem, 16*fem, 0*fem),
-                                width: double.infinity,
-                                decoration: BoxDecoration (
-                                  color: Color(0x7ffdfdfd),
-                                  borderRadius: BorderRadius.circular(16*fem),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color(0x33141414),
-                                      offset: Offset(2*fem, 4*fem),
-                                      blurRadius: 4*fem,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      // frame1exB (I93:951;93:1049)
-                                      margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 16*fem),
-                                      width: double.infinity,
-                                      height: 32*fem,
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            // correctnessLa7 (I93:951;93:749)
-                                            margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 66*fem, 0*fem),
-                                            child: Text(
-                                              'Structure',
-                                              style: SafeGoogleFont (
-                                                'Roboto',
-                                                fontSize: 20*ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.2*ffem/fem,
-                                                color: Color(0xff171d25),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            // frame4P2b (I93:951;93:750)
-                                            padding: EdgeInsets.fromLTRB(2.46*fem, 2*fem, 2*fem, 3.26*fem),
-                                            height: double.infinity,
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  // starfF1 (I93:951;93:819)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.14*fem, 8*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:951;93:819',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // stariyy (I93:951;93:843)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.14*fem, 8*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:951;93:843',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // starb2B (I93:951;93:871)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.14*fem, 8*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:951;93:871',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // star4gT (I93:951;93:879)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0.14*fem, 7.54*fem, 0*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:951;93:879',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // starY5q (I93:951;93:889)
-                                                  margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 0.14*fem),
-                                                  width: 28*fem,
-                                                  height: 26.6*fem,
-                                                  child: Image.asset(
-                                                    'REPLACE_IMAGE:I93:951;93:889',
-                                                    width: 28*fem,
-                                                    height: 26.6*fem,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      // youansweredthequestionanprovid (I93:951;93:761)
-                                      margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 19*fem, 0*fem),
-                                      constraints: BoxConstraints (
-                                        maxWidth: 307*fem,
-                                      ),
-                                      child: Text(
-                                        'You used the STAR method well: you covered the situation (what was the problem), the task (what was the goal), the action (what did you do) and the result (what was the outcome), but the task was not clearly defined.',
-                                        style: SafeGoogleFont (
-                                          'Roboto',
-                                          fontSize: 16*ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.5*ffem/fem,
-                                          letterSpacing: 0.8*fem,
-                                          color: Color(0xff516177),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            children: genResultsList(evaluationList, baseWidth, fem, ffem,),
                           ),
                         ),
                         Container(
@@ -676,7 +257,7 @@ class AnswerResults extends StatelessWidget {
                                       width: 16.5*fem,
                                       height: 9*fem,
                                       child: Image.asset(
-                                        'REPLACE_IMAGE:I129:1733;51:81',
+                                        'assets/screens/images/caretright.png',
                                         width: 16.5*fem,
                                         height: 9*fem,
                                       ),
@@ -690,7 +271,7 @@ class AnswerResults extends StatelessWidget {
                                         fontWeight: FontWeight.w600,
                                         height: 1.3333333333*ffem/fem,
                                         letterSpacing: 0.54*fem,
-                                        color: Color(0xff3a64f6),
+                                        color: const Color(0xff3a64f6),
                                       ),
                                     ),
                                   ],
@@ -742,6 +323,6 @@ class AnswerResults extends StatelessWidget {
           ],
         ),
       ),
-          );
+    );
   }
 }

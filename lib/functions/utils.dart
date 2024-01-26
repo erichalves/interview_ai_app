@@ -2,7 +2,7 @@ import 'dart:core';
 
 class Utils {
 
-  List<Map<String, dynamic>> parseServerEvaluation(String input) {
+  static List<Map<String, dynamic>> parseServerEvaluation(String input) {
 
     final regex = RegExp(r'(?:\d+\) )?(.*?): (\d+)(?:\.\d+)?/\d+ - (.*)');
     final matches = regex.allMatches(input);
