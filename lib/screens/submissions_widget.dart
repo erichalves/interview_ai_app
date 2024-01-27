@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/screens/feedback.dart';
 
 class Submissions extends StatelessWidget {
   final double baseWidth;
@@ -18,43 +19,37 @@ class Submissions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // frame1EC3 (51:301)
       margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 15 * fem),
       width: double.infinity,
       height: 48 * fem,
       child: Stack(
         children: [
           Align(
-            // freesubmissions335TZ (51:302)
-            // left: 0 * fem,
-            // top: 10 * fem,
             alignment: Alignment.centerLeft,
             child: Text(
-              'Free submissions: ${countFreeSubmissions}/3',
+              'Free submissions: $countFreeSubmissions/3',
               style: SafeGoogleFont(
                 'Roboto',
                 fontSize: 16 * ffem,
                 fontWeight: FontWeight.w400,
                 height: 1.5 * ffem / fem,
                 letterSpacing: 0.8 * fem,
-                color: Color(0xff516177),
+                color: const Color(0xff516177),
               ),
             ),
-            // Align(
-            //   child: SizedBox(
-            //     width: 175 * fem,
-            //     height: 24 * fem,
-            //     child: FreeSubmissionText(fem: fem, ffem: ffem),
-            //   ),
-            // ),
           ),
           Align(
-            // smallbuttonG2F (51:303)
-            // left: 169 * fem,
-            // top: 0 * fem,
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                      body: FeedbackScene(),
+                    ),
+                  ),
+                );
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
               ),
@@ -65,7 +60,7 @@ class Submissions extends StatelessWidget {
                 height: 40 * fem,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xff0f993f)),
+                  border: Border.all(color: const Color(0xff0f993f)),
                   borderRadius: BorderRadius.circular(32 * fem),
                 ),
                 child: Text(
@@ -76,7 +71,7 @@ class Submissions extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     height: 1.3333333333 * ffem / fem,
                     letterSpacing: 0.54 * fem,
-                    color: Color(0xff0f993f),
+                    color: const Color(0xff0f993f),
                   ),
                 ),
               ),
