@@ -34,16 +34,15 @@ void main() {
     });
   });
 
-  test('Fetch answered questions with score and feedback', () async {
+  test('Fetch answered questions with feedback', () async {
     final result = await apiService.getAnsweredQuestions();
 
     // Assuming you have at least one answered question for testing
     expect(result.isNotEmpty, true);
 
     // Check the structure of the response
-    result.forEach((questionId, details) {
-      expect(details.containsKey('score'), true);
-      expect(details.containsKey('feedback'), true);
+    result.forEach((questionId, feedback) {
+      expect(feedback.isNotEmpty, true); // Verify that feedback is provided
     });
   });
 
@@ -77,5 +76,16 @@ void main() {
     // Basic assertions
     expect(result['email'], testEmail);
     expect(result['feedback'], testFeedback);
+  });
+
+  test('Register interest without feedback', () async {
+    final testEmail = 'noFeedbackTest@example.com';
+
+    // Call the function without providing the feedback argument
+    final result = await apiService.registerInterest(testEmail);
+
+    // Basic assertions
+    expect(result['email'], testEmail);
+    expect(result['feedback'], null); // Expect feedback to be null or not set
   });
 }
