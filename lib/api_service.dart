@@ -29,7 +29,7 @@ class ApiService {
     }
   }
 
-  Future<Map<int, String>> getAnsweredQuestions() async {
+  Future<Map<int, Map<String, String>>> getAnsweredQuestions() async {
     final userId = await getDeviceId();
     final response = await http.get(
       Uri.parse('$baseUrl/answered-questions?user_id=$userId'),
@@ -42,8 +42,12 @@ class ApiService {
         throw Exception('Response is not a map');
       }
 
+      // Parse response to create a map of question IDs to score and feedback
       return jsonResponse.map((key, value) =>
-          MapEntry<int, String>(int.parse(key), value.toString()));
+          MapEntry<int, Map<String, String>>(int.parse(key), {
+            'score': value['score'].toString(),
+            'feedback': value['feedback'].toString()
+          }));
     } else {
       throw Exception('Failure with status code ${response.statusCode}');
     }
@@ -151,6 +155,26 @@ class ApiService {
       return jsonResponse.map((data) => data as Map<String, dynamic>).toList();
     } else {
       throw Exception('Failure with status code ${response.statusCode}');
+    }
+  }
+
+  Future<Map<String, dynamic>> registerInterest(String email,
+      {String? feedback}) async {
+    final userId = await getDeviceId();
+    final response = await http.post(
+      Uri.parse('$baseUrl/register_interest'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'user_id': userId,
+        'email': email,
+        'feedback': feedback, // Include feedback in the request body
+      }),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+          'Failed to register interest with status code: ${response.statusCode}');
     }
   }
 }
