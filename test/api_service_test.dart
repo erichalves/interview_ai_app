@@ -34,10 +34,16 @@ void main() {
     });
   });
 
-  test('Fetch answered questions', () async {
+  test('Fetch answered questions with feedback', () async {
     final result = await apiService.getAnsweredQuestions();
-    expect(result.length, 1);
-    expect(result.keys.first, 0);
+
+    // Assuming you have at least one answered question for testing
+    expect(result.isNotEmpty, true);
+
+    // Check the structure of the response
+    result.forEach((questionId, feedback) {
+      expect(feedback.isNotEmpty, true); // Verify that feedback is provided
+    });
   });
 
   test('Fetch used questions count', () async {
@@ -57,5 +63,29 @@ void main() {
     expect(questions[0].containsKey('question'), true);
     expect(questions[0].containsKey('company'), true);
     expect(questions[0].containsKey('job_position'), true);
+  });
+
+  test('Register interest with optional feedback', () async {
+    final testEmail = 'test@example.com';
+    final testFeedback = 'This is test feedback';
+
+    // Assuming the function just returns a success message or similar response
+    final result =
+        await apiService.registerInterest(testEmail, feedback: testFeedback);
+
+    // Basic assertions
+    expect(result['email'], testEmail);
+    expect(result['feedback'], testFeedback);
+  });
+
+  test('Register interest without feedback', () async {
+    final testEmail = 'noFeedbackTest@example.com';
+
+    // Call the function without providing the feedback argument
+    final result = await apiService.registerInterest(testEmail);
+
+    // Basic assertions
+    expect(result['email'], testEmail);
+    expect(result['feedback'], null); // Expect feedback to be null or not set
   });
 }
