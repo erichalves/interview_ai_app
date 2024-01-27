@@ -153,9 +153,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   }
 
   void _endTranscription(String transcriptedAudio, BuildContext context) {
-    setState(() {
-      _recordingState = RecordingState.completed;
-    });
     _controller.dispose();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Scaffold(
@@ -171,6 +168,18 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           ),
         ),
       ),
+    ).then(
+      (newQuestionFlag) {
+        if(newQuestionFlag) {
+          _recordingState = RecordingState.standBy;
+          questionId += 1;
+          updateQuestion();
+        } else {
+          setState(() {
+            _recordingState = RecordingState.completed;
+          });
+        }
+      }
     );
   }
 

@@ -400,7 +400,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context)
-                                        .pop(null); // This will return to the previous screen
+                                        .pop(false); // This will return to the previous screen
                                   },
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,

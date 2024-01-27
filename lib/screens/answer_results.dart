@@ -33,7 +33,7 @@ class Result extends StatelessWidget {
         if(remaining >= 1) {
           starImage = 'star';
           remaining -= 1;
-        } else if (remaining >= 0) {
+        } else if (remaining > 0) {
           starImage = 'starhalf';
           remaining = 0;
         }
@@ -86,10 +86,11 @@ class Result extends StatelessWidget {
             width: double.infinity,
             height: 32*fem,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 40*fem, 0*fem),
+                  margin: EdgeInsets.fromLTRB(0*fem, 4*fem, 0*fem, 0*fem),
                   child: Text(
                     title,
                     style: SafeGoogleFont (
@@ -106,7 +107,7 @@ class Result extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(2.46*fem, 2.14*fem, 1.54*fem, 3.26*fem),
                   height: double.infinity,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: starsWidget(stars),
                   ),
                 ),
@@ -213,9 +214,9 @@ class AnswerResults extends StatelessWidget {
                       children: [
                         Container(
                           // heresyourresultJhR (93:635)
-                          margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 32*fem),
+                          margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 25*fem),
                           child: Text(
-                            'Here`s your result:',
+                            "Here's your result:",
                             style: SafeGoogleFont (
                               'Squada One',
                               fontSize: 32*ffem,
@@ -227,57 +228,13 @@ class AnswerResults extends StatelessWidget {
                         ),
                         SizedBox(
                           // frame9KsR (93:1019)
+                          height: 450*fem,
                           width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: genResultsList(evaluationList, baseWidth, fem, ffem,),
-                          ),
-                        ),
-                        Container(
-                          // autogroupy8csMxP (R587KUDVcxgtqLG7CEy8cs)
-                          padding: EdgeInsets.fromLTRB(0*fem, 24*fem, 0*fem, 0*fem),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                // smallbuttonc7d (129:1733)
-                                margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 232*fem, 32*fem),
-                                padding: EdgeInsets.fromLTRB(3.75*fem, 8*fem, 0*fem, 8*fem),
-                                width: double.infinity,
-                                decoration: BoxDecoration (
-                                  borderRadius: BorderRadius.circular(32*fem),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      // caretdownScT (I129:1733;51:81)
-                                      margin: EdgeInsets.fromLTRB(0*fem, 1.5*fem, 11.75*fem, 0*fem),
-                                      width: 16.5*fem,
-                                      height: 9*fem,
-                                      child: Image.asset(
-                                        'assets/screens/images/caretright.png',
-                                        width: 16.5*fem,
-                                        height: 9*fem,
-                                      ),
-                                    ),
-                                    Text(
-                                      // button6S7 (I129:1733;51:33)
-                                      'Your answer',
-                                      style: SafeGoogleFont (
-                                        'Roboto',
-                                        fontSize: 18*ffem,
-                                        fontWeight: FontWeight.w600,
-                                        height: 1.3333333333*ffem/fem,
-                                        letterSpacing: 0.54*fem,
-                                        color: const Color(0xff3a64f6),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: genResultsList(evaluationList, baseWidth, fem, ffem,),
+                            )
                           ),
                         ),
                       ],
@@ -285,7 +242,10 @@ class AnswerResults extends StatelessWidget {
                   ),
                   TextButton(
                     // largebuttonr5q (93:617)
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pop(null);
+                      Navigator.of(context).pop(true);
+                    },
                     style: TextButton.styleFrom (
                       padding: EdgeInsets.zero,
                     ),
