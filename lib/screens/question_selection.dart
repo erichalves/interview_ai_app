@@ -285,13 +285,13 @@ class QuestionSelection extends StatelessWidget {
                     // frame1ZMu (113:689)
                     left: 18 * fem,
                     top: 0 * fem,
-                    child: Container(
+                    child: SizedBox(
                       width: 358 * fem,
                       height: 700 * fem,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                             // frame11on3 (135:3525)
                             width: double.infinity,
                             height: 70 * fem,
@@ -309,7 +309,7 @@ class QuestionSelection extends StatelessWidget {
                                       fontSize: 32 * ffem,
                                       fontWeight: FontWeight.w400,
                                       height: 1.25 * ffem / fem,
-                                      color: Color(0xff171d25),
+                                      color: const Color(0xff171d25),
                                     ),
                                   ),
                                 ),
@@ -323,7 +323,7 @@ class QuestionSelection extends StatelessWidget {
                                     borderRadius:
                                         BorderRadius.circular(16 * fem),
                                   ),
-                                  child: Container(
+                                  child: SizedBox(
                                     // autogroupev31Rgw (R58Xigj4Dqrh24X7rHEV31)
                                     width: double.infinity,
                                     height: double.infinity,
@@ -344,7 +344,7 @@ class QuestionSelection extends StatelessWidget {
                                             fontWeight: FontWeight.w600,
                                             height: 1.3333333333 * ffem / fem,
                                             letterSpacing: 0.54 * fem,
-                                            color: Color(0xff3a64f6),
+                                            color: const Color(0xff3a64f6),
                                           ),
                                         ),
                                       ),

@@ -70,7 +70,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     });
   }
 
-  void selectQuestion() {
+  void selectQuestion(BuildContext context) {
     apiService.fetchQuestions().then(
       (questionDict) {
         Navigator.of(context).push(
@@ -131,7 +131,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     apiService
         .uploadAndGetTranscription(
             question, _recordingManager.getRecordingPath(), waitLimit)
-        .then((transcriptedAudio) => _endTranscription(transcriptedAudio)).catchError(
+        .then((transcriptedAudio) => _endTranscription(transcriptedAudio, context)).catchError(
           (error) {
              // Update global variable with error message
             String globalErrorMessage = error.toString();
@@ -152,7 +152,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         );
   }
 
-  void _endTranscription(String transcriptedAudio) {
+  void _endTranscription(String transcriptedAudio, BuildContext context) {
     setState(() {
       _recordingState = RecordingState.completed;
     });
@@ -851,7 +851,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                             height: double.infinity,
                                             child: Center(
                                               child: TextButton(
-                                                onPressed: selectQuestion,
+                                                onPressed: () => selectQuestion(context),
                                                 style: TextButton.styleFrom(
                                                   padding: EdgeInsets.zero,
                                                 ),

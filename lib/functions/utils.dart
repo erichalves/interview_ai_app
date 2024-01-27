@@ -4,7 +4,7 @@ class Utils {
 
   static List<Map<String, dynamic>> parseServerEvaluation(String input) {
 
-    final regex = RegExp(r'(?:\d+\) )?(.*?): (\d+)(?:\.\d+)?/\d+ - (.*)');
+    final regex = RegExp(r'(?:\d+\) )?(.*?): (\d+(?:\.\d+)?)\/\d+ - (.*)');
     final matches = regex.allMatches(input);
 
     List<Map<String, dynamic>> resultList = [];
@@ -13,13 +13,13 @@ class Utils {
       // The input does not match the expected format, treat it as a general evaluation
       resultList.add({
         "criterion": "Evaluation",
-        "stars": 0,
+        "stars": 0.0,
         "evaluation": input
       });
     } else {
       for (final match in matches) {
         String? starsString = match.group(2);
-        int stars = starsString != null ? int.parse(starsString) : 0;
+        double stars = starsString != null ? double.parse(starsString) : 0.0;
         resultList.add({
           "criterion": match.group(1),
           "stars": stars,

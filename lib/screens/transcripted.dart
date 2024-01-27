@@ -65,18 +65,18 @@ class _TranscriptedScene extends State<TranscriptedScene> {
     super.dispose();
   }
 
-  void submitAnswer() {
+  void submitAnswer(BuildContext context) {
     apiService.submitTranscription(questionId, question, _textController.text).then((value) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Scaffold(
-          body: SingleChildScrollView(
-            child: AnswerResults(
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            body: AnswerResults(
               evaluationText: value,
               countFreeSubmissions: countFreeSubmissions,
-            )
+            ),
           ),
-        ),
-      ));
+        )
+      );
     });
   }
 
@@ -270,7 +270,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                                       letterSpacing: 0.8 * fem,
                                                       color: const Color(0xff171d25),
                                                     ),
-                                                    decoration: InputDecoration(
+                                                    decoration: const InputDecoration(
                                                       border: InputBorder.none,
                                                       hintText: 'Enter text', // Optionally, provide a hint.
                                                     ),
@@ -450,7 +450,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                               ),
                               TextButton(
                                 // largebuttonwpX (135:3594)
-                                onPressed: submitAnswer,
+                                onPressed: () => submitAnswer(context),
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                 ),
