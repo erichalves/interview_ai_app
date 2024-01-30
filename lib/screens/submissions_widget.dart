@@ -45,7 +45,9 @@ class Submissions extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Scaffold(
-                      body: FeedbackScene(),
+                      body: SingleChildScrollView(
+                        child: FeedbackScene(),
+                      ),
                     ),
                   ),
                 );

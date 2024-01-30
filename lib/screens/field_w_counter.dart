@@ -5,37 +5,42 @@ import 'package:myapp/utils.dart';
 class FiedWithCounter extends StatefulWidget {
   final String? initialText;
   final int maxLength;
+  final TextEditingController textController;
 
   const FiedWithCounter({
     Key? key,
     required this.maxLength,
+    required this.textController,
     this.initialText,
   }) : super(key: key);
 
   @override
-  _FiedWithCounter createState() => _FiedWithCounter();
+  _FiedWithCounter createState() => _FiedWithCounter(maxLength: maxLength, textController: textController, initialText: initialText);
 }
 
 class _FiedWithCounter extends State<FiedWithCounter> {
-  final TextEditingController _textController = TextEditingController();
+  final TextEditingController textController;
   int _characterCount = 0;
+  final int maxLength;
+  final String? initialText;
+
+  _FiedWithCounter({required this.maxLength, required this.textController, required this.initialText});
 
   @override
   void initState() {
     super.initState();
-    _textController.addListener(_updateCharacterCount);
+    textController.addListener(_updateCharacterCount);
   }
 
   void _updateCharacterCount() {
     setState(() {
-      _characterCount = _textController.text.length;
+      _characterCount = textController.text.length;
     });
   }
 
   @override
   void dispose() {
-    _textController.removeListener(_updateCharacterCount);
-    _textController.dispose();
+    textController.removeListener(_updateCharacterCount);
     super.dispose();
   }
 
@@ -74,12 +79,12 @@ class _FiedWithCounter extends State<FiedWithCounter> {
                   CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 3 * fem, 0 * fem),
+                  margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 0 * fem),
                   constraints: BoxConstraints(
-                    maxWidth: 327 * fem,
+                    maxWidth: 335 * fem,
                   ),
                   child: TextField(
-                    controller: _textController,
+                    controller: textController,
                     style: SafeGoogleFont(
                       'Roboto',
                       fontSize: 16 * ffem,
@@ -88,12 +93,15 @@ class _FiedWithCounter extends State<FiedWithCounter> {
                       letterSpacing: 0.8 * fem,
                       color: const Color(0xff171d25),
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Enter feedback', // Optionally, provide a hint.
+                      // border: InputBorder.none,
+                      hintText: initialText, // Optionally, provide a hint.
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
+                      counterText: "",
                     ),
                     maxLines: null, // Set to null to allow multi-line input.
-                    maxLength: 5500, // Limit to 5500 characters.
+                    maxLength: maxLength,
                   ),
                 ),
                 Container(
@@ -136,7 +144,7 @@ class _FiedWithCounter extends State<FiedWithCounter> {
             height: 32 * fem,
             child: Text(
               // 2n7 (135:3572)
-              '$_characterCount/5500',
+              '$_characterCount/$maxLength',
               textAlign: TextAlign.end,
               style: SafeGoogleFont(
                 'Roboto',

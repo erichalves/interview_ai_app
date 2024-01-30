@@ -152,7 +152,7 @@ class FeedbackScene extends StatelessWidget {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 3 * fem, 0 * fem),
+                                                  margin: EdgeInsets.fromLTRB(0 * fem, 1 * fem, 0 * fem, 1 * fem),
                                                   constraints: BoxConstraints(
                                                     maxWidth: 327 * fem,
                                                   ),
@@ -169,8 +169,9 @@ class FeedbackScene extends StatelessWidget {
                                                     decoration: const InputDecoration(
                                                       border: InputBorder.none,
                                                       hintText: 'john@gmail.com',
+                                                      contentPadding: EdgeInsets.symmetric(vertical: 10.0)
                                                     ),
-                                                    maxLines: null, // Set to null to allow multi-line input.
+                                                    maxLines: 1, // Set to null to allow multi-line input.
                                                   ),
                                                 ),
                                                 Container(
@@ -238,7 +239,7 @@ class FeedbackScene extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    const FiedWithCounter(maxLength: 5500),
+                                    FiedWithCounter(maxLength: 5500, textController: _textController, initialText: "Enter feedback",),
                                   ],
                                 ),
                               ),
