@@ -8,8 +8,12 @@ import 'package:myapp/screens/question_selection.dart';
 import 'package:myapp/screens/logo_widget.dart';
 import 'package:myapp/screens/submissions_widget.dart';
 import 'package:myapp/screens/confirmation.dart';
+import 'package:myapp/screens/feedback.dart';
 
 class Scene extends StatefulWidget {
+
+  const Scene({Key? key}): super(key: key);
+
   @override
   _Scene createState() => _Scene();
 }
@@ -18,6 +22,7 @@ enum RecordingState { standBy, recording, completed, discardWarning, transcribin
 
 class _Scene extends State<Scene> with TickerProviderStateMixin  {
   int _countFreeSubmissions = 0;
+  int _litmitFreeSubmissions = 3;
   RecordingState _recordingState = RecordingState.standBy;
   final RecordingManager _recordingManager = RecordingManager();
   final int _recommendedTime = 3 * 60; //time in seconds
@@ -38,8 +43,17 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   void initState() {
     super.initState();
     updateQuestion();
+    updateUserStatus();
+  }
+
+  void updateUserStatus() {
     apiService.isUserPremium().then((value) {
       _isPremiumUser = value;
+      if (_isPremiumUser) {
+        _litmitFreeSubmissions = 20;
+      } else {
+        _litmitFreeSubmissions = 3;
+      }
     }).catchError((error) {
       final snackBar = SnackBar(
         content: Text('Error obtaining user status: $error'),
@@ -49,7 +63,9 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     });
     apiService.getUsedQuestionsCount().then((value) {
       _countFreeSubmissions = value;
-    }).catchError((error) {}); // do nothing
+    }).catchError((error) {
+      _countFreeSubmissions = _litmitFreeSubmissions;
+    });
   }
 
   void updateQuestion() {
@@ -174,6 +190,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           _recordingState = RecordingState.standBy;
           questionId += 1;
           updateQuestion();
+          updateUserStatus();
         } else {
           setState(() {
             _recordingState = RecordingState.completed;
@@ -227,7 +244,58 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
 
   Widget recordingButton(double fem, double ffem, RecordingState recordingState,
       RecordingManager recordingManager, int timer) {
-    if (recordingState == RecordingState.standBy) {
+    if (_countFreeSubmissions >= _litmitFreeSubmissions) {
+      // Buy more questions
+      return TextButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                body: SingleChildScrollView(
+                  child: FeedbackScene(),
+                ),
+              ),
+            ),
+          );
+        },
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          height: 56 * fem,
+          child: Container(
+            // largebuttonLKu (113:495)
+            padding:
+                EdgeInsets.fromLTRB(28.5 * fem, 16 * fem, 14 * fem, 16 * fem),
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 228, 228, 228),
+              border: Border.all(color: const Color(0xff0f993f)),
+              borderRadius: BorderRadius.circular(32 * fem),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  // buttonGcs (I113:495;50:879)
+                  'Upgrade !',
+                  style: SafeGoogleFont(
+                    'Roboto',
+                    fontSize: 18 * ffem,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3333333333 * ffem / fem,
+                    letterSpacing: 0.54 * fem,
+                    color: const Color(0xff0f993f),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (recordingState == RecordingState.standBy) {
       return TextButton(
         onPressed: () {
           recordingManager.startRecording();
@@ -333,7 +401,9 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
       );
     } else if (recordingState == RecordingState.completed || recordingState == RecordingState.discardWarning) {
       return TextButton(
-        onPressed: () {},
+        onPressed: () {
+          // TODO:  restart recording
+        },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
         ),
@@ -442,7 +512,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     double ffem,
     RecordingState recordingState,
   ) {
-    if (recordingState == RecordingState.standBy) {
+    if ((recordingState == RecordingState.standBy) | (_countFreeSubmissions >= _litmitFreeSubmissions)) {
       return TextButton(
         onPressed: () {
           if (_isPremiumUser  | (questionId < 4)) {
@@ -469,9 +539,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
             borderRadius: BorderRadius.circular(32 * fem),
           ),
           child: Container(
-            // autogroupund1BQf (R57S11tyBCdoBvRtbwunD1)
-            // width: double.infinity,
-            // height: double.infinity,
             alignment: Alignment.center,
             child: Text(
               'Skip question',
@@ -665,117 +732,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  // Container(
-                                  //   // questiontitleVSj (51:293)
-                                  //   margin: EdgeInsets.fromLTRB(
-                                  //       0 * fem, 0 * fem, 0 * fem, 16 * fem),
-                                  //   child: TextButton(
-                                  //     onPressed: () {},
-                                  //     style: TextButton.styleFrom(
-                                  //       padding: EdgeInsets.zero,
-                                  //     ),
-                                  //     child: Container(
-                                  //       padding: EdgeInsets.fromLTRB(100.5 * fem,
-                                  //           16 * fem, 35 * fem, 16 * fem),
-                                  //       width: double.infinity,
-                                  //       height: 84 * fem,
-                                  //       decoration: BoxDecoration(
-                                  //         border:
-                                  //             Border.all(color: const Color(0xfff0f0f0)),
-                                  //         color: const Color(0x7ffdfdfd),
-                                  //         borderRadius:
-                                  //             BorderRadius.circular(16 * fem),
-                                  //         boxShadow: [
-                                  //           BoxShadow(
-                                  //             color: const Color(0x33141414),
-                                  //             offset: Offset(2 * fem, 4 * fem),
-                                  //             blurRadius: 4 * fem,
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //       child: Container(
-                                  //         // frame4RDu (I51:293;50:863)
-                                  //         padding: EdgeInsets.fromLTRB(
-                                  //             0 * fem, 0 * fem, 5 * fem, 0 * fem),
-                                  //         width: double.infinity,
-                                  //         height: double.infinity,
-                                  //         child: Row(
-                                  //           crossAxisAlignment:
-                                  //               CrossAxisAlignment.center,
-                                  //           children: [
-                                  //             SizedBox(
-                                  //               // frame27659 (I51:293;50:864)
-                                  //               // margin: EdgeInsets.fromLTRB(0 * fem,
-                                  //               //     0 * fem, 38.5 * fem, 0 * fem),
-                                  //               height: double.infinity,
-                                  //               child: Column(
-                                  //                 crossAxisAlignment:
-                                  //                     CrossAxisAlignment.center,
-                                  //                 children: [
-                                  //                   Container(
-                                  //                     // positionNoM (I51:293;50:865)
-                                  //                     margin: EdgeInsets.fromLTRB(
-                                  //                         0 * fem,
-                                  //                         0 * fem,
-                                  //                         0 * fem,
-                                  //                         4 * fem),
-                                  //                     child: Text(
-                                  //                       'Software Engineer',
-                                  //                       textAlign: TextAlign.center,
-                                  //                       style: SafeGoogleFont(
-                                  //                         'Roboto',
-                                  //                         fontSize: 18 * ffem,
-                                  //                         fontWeight:
-                                  //                             FontWeight.w500,
-                                  //                         height: 1.3333333333 *
-                                  //                             ffem /
-                                  //                             fem,
-                                  //                         letterSpacing: 0.54 * fem,
-                                  //                         color: const Color(0xff516177),
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                   Text(
-                                  //                     // companyRFq (I51:293;50:866)
-                                  //                     'Google',
-                                  //                     textAlign: TextAlign.center,
-                                  //                     style: SafeGoogleFont(
-                                  //                       'Roboto',
-                                  //                       fontSize: 18 * ffem,
-                                  //                       fontWeight: FontWeight.w400,
-                                  //                       height: 1.3333333333 *
-                                  //                           ffem /
-                                  //                           fem,
-                                  //                       letterSpacing: 0.54 * fem,
-                                  //                       color: const Color(0xff516177),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //             ),
-                                  //             Align(
-                                  //               alignment: Alignment.centerRight,
-                                  //               child: TextButton(
-                                  //                 // questiontextygf (51:294)
-                                  //                 onPressed: _openNewPositionScreen,
-                                  //                 style: TextButton.styleFrom(
-                                  //                   padding: EdgeInsets.zero,
-                                  //                 ),
-                                  //                 // child: Text('Nice'),
-                                  //                 child: Image.asset(
-                                  //                   'assets/screens/images/caretdown-RyD.png',
-                                  //                   // 'Image1',
-                                  //                   width: 22 * fem,
-                                  //                   height: 12 * fem,
-                                  //                 ),
-                                  //               ),
-                                  //             )
-                                  //           ],
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   Container(
                                     padding: EdgeInsets.fromLTRB(
                                         17 * fem, 32 * fem, 16 * fem, 16 * fem),
@@ -924,8 +880,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                             height: 13 * fem,
                                           ),
                                         ),
-                                        Text(
-                                          // recommendedduration2to3minutes (51:300)
+                                        _countFreeSubmissions >= _litmitFreeSubmissions ? Text(
                                           'Recommended duration: 2 to 3 minutes',
                                           style: SafeGoogleFont(
                                             'Roboto',
@@ -933,6 +888,15 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                             fontWeight: FontWeight.w400,
                                             height: 1 * ffem / fem,
                                             color: const Color(0xff516177),
+                                          ),
+                                        ) : Text(
+                                          'You\'ve reached the limit of $_litmitFreeSubmissions questions',
+                                          style: SafeGoogleFont(
+                                            'Roboto',
+                                            fontSize: 12 * ffem,
+                                            fontWeight: FontWeight.w400,
+                                            height: 1 * ffem / fem,
+                                            color: const Color(0xff891a1e),
                                           ),
                                         ),
                                       ],
