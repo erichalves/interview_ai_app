@@ -122,6 +122,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   }
 
   void _startTranscription(BuildContext context) {
+    _recordingManager.stopRecording();
     setState(() {
       _recordingState = RecordingState.transcribing;
     });
@@ -201,18 +202,44 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   }
 
   void discardAudioReply(bool discard) {
-    setState(() {
-      if(discard){
+    if(discard){
+      _recordingManager.stopRecording();
+      setState(() {
         _recordingState = RecordingState.standBy;
-      } else {
+      });
+    } else {
+      setState(() {
         _recordingState = RecordingState.completed;
-      }
-    });
+      });
+    }
   }
 
   void _startTimer() {
     _timerCount = 0;
-    _recordingState = RecordingState.recording;
+    _resumeTimer();
+  }
+
+  void _stopTimer() {
+    setState(() {
+      _recordingState = RecordingState.completed;
+    });
+    _timer?.cancel();
+  }
+
+  void _resumeTimer() {
+    if (_timerCount > _maxTime) {
+      String formattedMaxTime = formatTime(_maxTime);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Time limit of $formattedMaxTime reached"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    setState(() {
+      _recordingState = RecordingState.recording;
+    });
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timerCount > _maxTime) {
         timer.cancel();
@@ -226,13 +253,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         });
       }
     });
-  }
-
-  void _stopTimer() {
-    setState(() {
-      _recordingState = RecordingState.completed;
-    });
-    _timer?.cancel();
   }
 
   @override
@@ -352,7 +372,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     } else if (recordingState == RecordingState.recording) {
       return TextButton(
         onPressed: () {
-          recordingManager.stopRecording();
+          recordingManager.pauseRecording();
           _stopTimer();
         },
         style: TextButton.styleFrom(
@@ -402,6 +422,8 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     } else if (recordingState == RecordingState.completed || recordingState == RecordingState.discardWarning) {
       return TextButton(
         onPressed: () {
+          recordingManager.resumeRecording();
+          _resumeTimer();
           // TODO:  restart recording
         },
         style: TextButton.styleFrom(

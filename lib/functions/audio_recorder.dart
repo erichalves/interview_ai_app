@@ -42,6 +42,14 @@ class RecordingManager {
     await _recorder.closeRecorder();
   }
 
+  Future<void> pauseRecording() async {
+    await _recorder.pauseRecorder();
+  }
+
+  Future<void> resumeRecording() async {
+    await _recorder.resumeRecorder();
+  }
+
   Future<void> deleteRecording() async {
     if (_path.isEmpty) {
       throw Exception("No recording found to delete.");
