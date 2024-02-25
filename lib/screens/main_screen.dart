@@ -31,13 +31,14 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   Timer? _timer;
   int _timerCount = 0;
   ApiService apiService = ApiService();
-  int questionId = 0;
+  int questionId = 1;
   String question =
       "Tell me about a time when you worked on a project with a tight deadline.";
   String jobPosition = "Software Engineer";
   String company = "Google";
   late AnimationController _controller;
   final int waitLimit = 15;
+  final int sizeFreeQuestionSelection = 10;
 
   @override
   void initState() {
@@ -95,7 +96,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
               body: SafeArea(
                 child: QuestionSelection(
                   questionId: questionId,
-                  questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, 10),
+                  questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, sizeFreeQuestionSelection),
                   isUserPremium: _isPremiumUser,
                 ),
               ),
@@ -430,7 +431,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         onPressed: () {
           recordingManager.resumeRecording();
           _resumeTimer();
-          // TODO:  restart recording
         },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -543,17 +543,17 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     if ((recordingState == RecordingState.standBy) | (_countFreeSubmissions >= _litmitFreeSubmissions)) {
       return TextButton(
         onPressed: () {
-          if (_isPremiumUser  | (questionId < 4)) {
+          if (_isPremiumUser  | (questionId <= sizeFreeQuestionSelection)) {
             questionId += 1;
             updateQuestion();
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Free users have only 5 questions available to them"),
+              SnackBar(
+                content: Text("Free users have only $sizeFreeQuestionSelection questions available to them"),
                 backgroundColor: Colors.green,
               ),
             );
-            questionId = 0;
+            questionId = 1;
             updateQuestion();
           }
         },
@@ -760,7 +760,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                 children: [
                                   Container(
                                     padding: EdgeInsets.fromLTRB(
-                                        17 * fem, 32 * fem, 16 * fem, 16 * fem),
+                                        10 * fem, 32 * fem, 10 * fem, 16 * fem),
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       border:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:myapp/utils.dart';
 import 'package:myapp/screens/logo_widget.dart';
+import 'package:myapp/screens/feedback.dart';
 
 class Question extends StatelessWidget {
   final double baseWidth;
@@ -214,7 +215,19 @@ class FreemiumWarning extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(
                         40 * fem, 0 * fem, 40 * fem, 0 * fem),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                              body: SafeArea(
+                                child: SingleChildScrollView(
+                                  child: FeedbackScene(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                       ),
