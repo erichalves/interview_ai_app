@@ -23,7 +23,7 @@ class RecordingManager {
   Future<void> requestRecordPermission() async {
     var status = await Permission.microphone.status;
     if (!status.isGranted) {
-      Permission.microphone.request();
+      await Permission.microphone.request();
     }
   }
 

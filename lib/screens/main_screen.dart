@@ -92,10 +92,12 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              body: QuestionSelection(
-                questionId: questionId,
-                questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, 10),
-                isUserPremium: _isPremiumUser,
+              body: SafeArea(
+                child: QuestionSelection(
+                  questionId: questionId,
+                  questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, 10),
+                  isUserPremium: _isPremiumUser,
+                ),
               ),
             ),
           ),
@@ -173,15 +175,17 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     _controller.dispose();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Scaffold(
-          body: SingleChildScrollView(
-            child: TranscriptedScene(
-              transcriptedAudio: transcriptedAudio,
-              countFreeSubmissions: _countFreeSubmissions,
-              question: question,
-              questionId: questionId,
-              jobPosition: jobPosition,
-              company: company,
-            )
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: TranscriptedScene(
+                transcriptedAudio: transcriptedAudio,
+                countFreeSubmissions: _countFreeSubmissions,
+                question: question,
+                questionId: questionId,
+                jobPosition: jobPosition,
+                company: company,
+              )
+            ),
           ),
         ),
       ),
@@ -271,8 +275,10 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => Scaffold(
-                body: SingleChildScrollView(
-                  child: FeedbackScene(),
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    child: FeedbackScene(),
+                  ),
                 ),
               ),
             ),
@@ -325,9 +331,9 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           padding: EdgeInsets.zero,
         ),
         child: Container(
-          padding:
-              EdgeInsets.fromLTRB(28.5 * fem, 16 * fem, 4.5 * fem, 16 * fem),
-          width: double.infinity,
+          // padding:
+          //     EdgeInsets.fromLTRB(28.5 * fem, 16 * fem, 4.5 * fem, 16 * fem),
+          width: 220 * fem,
           height: 56 * fem,
           decoration: BoxDecoration(
             color: const Color(0xfff8f8f8), //Color(0xff3a64f6),
@@ -340,9 +346,9 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
               Container(
                 // microphoneWP5 (I51:296;50:889)
                 margin:
-                    EdgeInsets.fromLTRB(0 * fem, 0 * fem, 12.5 * fem, 0 * fem),
+                    EdgeInsets.fromLTRB(20 * fem, 0 * fem, 20 * fem, 0 * fem),
                 width: 15 * fem,
-                height: 21 * fem,
+                height: 22.5 * fem,
                 child: Image.asset(
                   'assets/screens/images/microphone.png',
                   width: 15 * fem,
@@ -352,7 +358,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
               SizedBox(
                 // autogroupxhbhPhm (R57Sp5NtWUEVRBWjCNXHBh)
                 width: 135.5 * fem,
-                height: double.infinity,
+                height: 22.5 * fem,
                 child: Text(
                   'Start recording',
                   style: SafeGoogleFont(
@@ -538,9 +544,9 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
       return TextButton(
         onPressed: () {
           if (_isPremiumUser  | (questionId < 4)) {
-            questionId++;
+            questionId += 1;
             updateQuestion();
-          } else if (!_isPremiumUser) {
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Free users have only 5 questions available to them"),
@@ -552,8 +558,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           }
         },
         child: Container(
-          // smallbuttonuT9 (51:290)
-          padding: EdgeInsets.fromLTRB(5 * fem, 8 * fem, 5 * fem, 8 * fem),
           width: 150 * fem,
           height: 40 * fem,
           decoration: BoxDecoration(
@@ -563,7 +567,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              'Skip question',
+              'Next question',
               style: SafeGoogleFont(
                 'Roboto',
                 fontSize: 18 * ffem,
@@ -822,26 +826,22 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          // largebutton9NB (I51:294;51:243)
-                                          padding: EdgeInsets.fromLTRB(24 * fem,
-                                              16 * fem, 7 * fem, 16 * fem),
-                                          width: 178 * fem,
-                                          height: 56 * fem,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(32 * fem),
+                                        TextButton(
+                                          onPressed: () => selectQuestion(context),
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
                                           ),
-                                          child: SizedBox(
-                                            // autogroupedsqbEB (R57SZLJTHFLfQ7CUo4edsq)
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                            child: Center(
-                                              child: TextButton(
-                                                onPressed: () => selectQuestion(context),
-                                                style: TextButton.styleFrom(
-                                                  padding: EdgeInsets.zero,
-                                                ),
+                                          child: Container(
+                                            width: 178 * fem,
+                                            height: 56 * fem,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(32 * fem),
+                                            ),
+                                            child: SizedBox(
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              child: Center(
                                                 child: Text(
                                                   'Choose Question',
                                                   style: SafeGoogleFont(
@@ -856,7 +856,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                                 ),
                                               ),
                                             ),
-                                          ),
+                                          )
                                         ),
                                       ],
                                     ),
@@ -864,10 +864,10 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                 ]
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               // frame11DmM (51:295)
-                              margin: EdgeInsets.fromLTRB(
-                                  63.5 * fem, 32 * fem, 64.5 * fem, 0 * fem),
+                              // margin: EdgeInsets.fromLTRB(
+                              //     63.5 * fem, 32 * fem, 64.5 * fem, 0 * fem),
                               width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -889,11 +889,12 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                     width: double.infinity,
                                     child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Container(
                                           // infoxPV (51:298)
                                           margin: EdgeInsets.fromLTRB(
-                                              0 * fem, 0 * fem, 5.5 * fem, 0 * fem),
+                                              0 * fem, 0 * fem, 5  * fem, 0 * fem),
                                           width: 13 * fem,
                                           height: 13 * fem,
                                           child: Image.asset(
@@ -902,7 +903,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                             height: 13 * fem,
                                           ),
                                         ),
-                                        _countFreeSubmissions >= _litmitFreeSubmissions ? Text(
+                                        _countFreeSubmissions < _litmitFreeSubmissions ? Text(
                                           'Recommended duration: 2 to 3 minutes',
                                           style: SafeGoogleFont(
                                             'Roboto',

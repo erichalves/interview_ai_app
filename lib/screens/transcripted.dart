@@ -70,9 +70,13 @@ class _TranscriptedScene extends State<TranscriptedScene> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => Scaffold(
-            body: AnswerResults(
-              evaluationText: value,
-              countFreeSubmissions: countFreeSubmissions,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: AnswerResults(
+                  evaluationText: value,
+                  countFreeSubmissions: countFreeSubmissions,
+                ),
+              ),
             ),
           ),
         )

@@ -27,6 +27,8 @@ class Question extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.fromLTRB(
+        20 * fem, 0 * fem, 20 * fem, 0 * fem),
       padding: EdgeInsets.fromLTRB(16 * fem, 16 * fem, 11 * fem, 8 * fem),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -195,7 +197,7 @@ class FreemiumWarning extends StatelessWidget {
                         maxWidth: 284 * fem,
                       ),
                       child: Text(
-                        'You are on a free version.\nBecome Premium to have access to all our questions.',
+                        'You are on a free version.\nBecome Premium to have access to hundred of questions.',
                         textAlign: TextAlign.center,
                         style: SafeGoogleFont(
                           'Roboto',
@@ -279,112 +281,108 @@ class QuestionSelection extends StatelessWidget {
               // autogroupguepriP (R58X6NSEVmd4L4NsM3gUEP)
               width: double.infinity,
               height: 700 * fem,
+              // Stack servers the purpose of stacking the free user warning
               child: Stack(
                 children: [
-                  Positioned(
-                    // frame1ZMu (113:689)
-                    left: 18 * fem,
-                    top: 0 * fem,
-                    child: SizedBox(
-                      width: 358 * fem,
-                      height: 700 * fem,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            // frame11on3 (135:3525)
-                            width: double.infinity,
-                            height: 70 * fem,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  // chooseaquestioni8K (113:690)
-                                  margin: EdgeInsets.fromLTRB(
-                                      0 * fem, 0 * fem, 40 * fem, 0 * fem),
-                                  child: Text(
-                                    'Choose a question',
-                                    style: SafeGoogleFont(
-                                      'Squada One',
-                                      fontSize: 32 * ffem,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.25 * ffem / fem,
-                                      color: const Color(0xff171d25),
-                                    ),
-                                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        // frame11on3 (135:3525)
+                        width: double.infinity,
+                        height: 70 * fem,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              // chooseaquestioni8K (113:690)
+                              margin: EdgeInsets.fromLTRB(
+                                  20 * fem, 0 * fem, 0 * fem, 0 * fem),
+                              child: Text(
+                                'Choose a question',
+                                style: SafeGoogleFont(
+                                  'Squada One',
+                                  fontSize: 32 * ffem,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.25 * ffem / fem,
+                                  color: const Color(0xff171d25),
                                 ),
-                                Container(
-                                  // smallbuttonkqh (135:3521)
-                                  padding: EdgeInsets.fromLTRB(
-                                      16 * fem, 8 * fem, 9 * fem, 8 * fem),
-                                  width: 80 * fem,
-                                  height: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(16 * fem),
-                                  ),
-                                  child: SizedBox(
-                                    // autogroupev31Rgw (R58Xigj4Dqrh24X7rHEV31)
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    child: Center(
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(null); // This will return to the previous screen
-                                        },
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.zero,
-                                        ),
-                                        child: Text(
-                                          'Return',
-                                          style: SafeGoogleFont(
-                                            'Roboto',
-                                            fontSize: 18 * ffem,
-                                            fontWeight: FontWeight.w600,
-                                            height: 1.3333333333 * ffem / fem,
-                                            letterSpacing: 0.54 * fem,
-                                            color: const Color(0xff3a64f6),
-                                          ),
-                                        ),
+                              ),
+                            ),
+                            Container(
+                              width: 100 * fem,
+                              height: 35 * fem,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: const Color(0xff3a64f6)),
+                                borderRadius: BorderRadius.circular(16 * fem),
+                              ),
+                              margin: EdgeInsets.fromLTRB(
+                                  0 * fem, 0 * fem, 20 * fem, 0 * fem),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: double.infinity,
+                                child: Center(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(null); // This will return to the previous screen
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                    child: Text(
+                                      'Return',
+                                      style: SafeGoogleFont(
+                                        'Roboto',
+                                        fontSize: 18 * ffem,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.3333333333 * ffem / fem,
+                                        letterSpacing: 0.54 * fem,
+                                        color: const Color(0xff3a64f6),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: questionDict.length * 2,
-                              itemBuilder: (context, index) {
-                                return (index % 2 == 1)
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pop({"questionId": index ~/ 2, "question": questionDict[index ~/ 2]["question"]});
-                                        },
-                                        child: Question(
-                                          baseWidth: baseWidth,
-                                          fem: fem,
-                                          ffem: ffem,
-                                          questionId: index ~/ 2,
-                                          question: questionDict[index ~/ 2]
-                                                  ["question"]
-                                              .toString(),
-                                          role: questionDict[index ~/ 2]
-                                                  ["job_position_full_name"]
-                                              .toString(),
-                                          company: questionDict[index ~/ 2]
-                                                  ["company"]
-                                              .toString(),
-                                        )
-                                    ) : SizedBox(height: 16 * fem);
-                              },
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: questionDict.length * 2,
+                          itemBuilder: (context, index) {
+                            return (index % 2 == 1)
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop({
+                                        "questionId": index ~/ 2,
+                                        "question": questionDict[index ~/ 2]["question"],
+                                        "job_position_full_name": questionDict[index ~/ 2]["job_position_full_name"],
+                                        "company": questionDict[index ~/ 2]["company"],
+                                      });
+                                    },
+                                    child: Question(
+                                      baseWidth: baseWidth,
+                                      fem: fem,
+                                      ffem: ffem,
+                                      questionId: index ~/ 2,
+                                      question: questionDict[index ~/ 2]
+                                              ["question"]
+                                          .toString(),
+                                      role: questionDict[index ~/ 2]
+                                              ["job_position_full_name"]
+                                          .toString(),
+                                      company: questionDict[index ~/ 2]
+                                              ["company"]
+                                          .toString(),
+                                    )
+                                ) : SizedBox(height: 16 * fem);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   FreemiumWarning(isUserPremium: isUserPremium, baseWidth: baseWidth, fem: fem, ffem: ffem)
                 ],

@@ -11,24 +11,27 @@ void main() {
   });
 
   // Run your app
-  runApp(MyApp());
+  runApp(const InterviewAI());
 }
 
-class MyApp extends StatelessWidget {
+class InterviewAI extends StatelessWidget {
+
+  const InterviewAI({Key? key}): super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter',
+      title: 'Interview AI',
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        //TODO: replace home with routes and initialRoute
-        //https://docs.flutter.dev/ui/navigation#using-named-routes
-        body: SingleChildScrollView(
-          child: Scene(),
+      home: const Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Scene(),
+          ),
         ),
       ),
     );
