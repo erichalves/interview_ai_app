@@ -31,7 +31,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   Timer? _timer;
   int _timerCount = 0;
   ApiService apiService = ApiService();
-  int questionId = 1;
+  int questionId = 0;
   String question =
       "Tell me about a time when you worked on a project with a tight deadline.";
   String jobPosition = "Software Engineer";
@@ -70,7 +70,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   }
 
   void updateQuestion() {
-    apiService.fetchQuestions(questionId: questionId).then(
+    apiService.fetchQuestions(questionId: questionId + 1).then(
       (value) {
         setState(() {
           question = value[0]["question"].toString();
@@ -125,7 +125,6 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   }
 
   void _startTranscription(BuildContext context) {
-    _recordingManager.stopRecording();
     setState(() {
       _recordingState = RecordingState.transcribing;
     });
@@ -148,28 +147,40 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
       })
       ..forward();
 
-    apiService
+    _recordingManager.stopRecording().then((value) {
+      apiService
         .uploadAndGetTranscription(
             question, _recordingManager.getRecordingPath(), waitLimit)
         .then((transcriptedAudio) => _endTranscription(transcriptedAudio, context)).catchError(
           (error) {
-             // Update global variable with error message
-            String globalErrorMessage = error.toString();
-
-            // Display the error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(globalErrorMessage),
-                backgroundColor: Colors.red,
-              ),
-            );
-
-            setState(() {
-              _recordingState = RecordingState.completed;
-            });
-            _controller.dispose();
+            _endTranscriptionWithError(error);
+            return null; // Explicitly return null to match the expected return type.
           }
         );
+    }).catchError(
+      (error) {
+        _endTranscriptionWithError(error);
+        return null; // Explicitly return null to match the expected return type.
+      }
+    );
+  }
+
+  void _endTranscriptionWithError(String error) {
+    // Update global variable with error message
+    String globalErrorMessage = error.toString();
+
+    // Display the error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(globalErrorMessage),
+        backgroundColor: Colors.red,
+      ),
+    );
+
+    setState(() {
+      _recordingState = RecordingState.completed;
+    });
+    _controller.dispose();
   }
 
   void _endTranscription(String transcriptedAudio, BuildContext context) {
@@ -358,8 +369,8 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
               ),
               SizedBox(
                 // autogroupxhbhPhm (R57Sp5NtWUEVRBWjCNXHBh)
-                width: 135.5 * fem,
-                height: 22.5 * fem,
+                width: 145 * fem,
+                height: 25 * fem,
                 child: Text(
                   'Start recording',
                   style: SafeGoogleFont(
@@ -388,7 +399,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         child: Container(
           padding:
               EdgeInsets.fromLTRB(27.75 * fem, 16 * fem, 14 * fem, 16 * fem),
-          width: double.infinity,
+          width: 200 * fem,
           decoration: BoxDecoration(
             color: _timerCount <= _recommendedTime
                 ? const Color(0xff3154cd)
@@ -436,7 +447,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           padding: EdgeInsets.zero,
         ),
         child: SizedBox(
-          width: double.infinity,
+          width: 200 * fem,
           height: 56 * fem,
           child: Container(
             // largebuttonLKu (113:495)
@@ -486,7 +497,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         // largebuttonHas (68:303)
         margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 8 * fem),
         padding: EdgeInsets.fromLTRB(16 * fem, 16 * fem, 10 * fem, 16 * fem),
-        width: double.infinity,
+        width: 200 * fem,
         height: 56 * fem,
         decoration: BoxDecoration(
           color: const Color(0xffd0d4d9),
@@ -543,7 +554,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     if ((recordingState == RecordingState.standBy) | (_countFreeSubmissions >= _litmitFreeSubmissions)) {
       return TextButton(
         onPressed: () {
-          if (_isPremiumUser  | (questionId <= sizeFreeQuestionSelection)) {
+          if (_isPremiumUser  | (questionId < sizeFreeQuestionSelection)) {
             questionId += 1;
             updateQuestion();
           } else {
@@ -553,7 +564,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                 backgroundColor: Colors.green,
               ),
             );
-            questionId = 1;
+            questionId = 0;
             updateQuestion();
           }
         },

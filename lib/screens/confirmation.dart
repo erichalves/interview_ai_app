@@ -50,11 +50,11 @@ class DiscardWarning extends StatelessWidget {
     return Positioned(
       // errormessageKGf (129:3416)
       left: 16*fem,
-      top: 294*fem,
+      top: 280*fem,
       child: Container(
         padding: EdgeInsets.fromLTRB(36.5*fem, 32*fem, 36.5*fem, 32*fem),
         width: 358*fem,
-        height: 256*fem,
+        height: 275*fem,
         decoration: BoxDecoration (
           border: Border.all(color: const Color(0xfff0f0f0)),
           color: const Color(0xfff8f8f8),
@@ -68,11 +68,12 @@ class DiscardWarning extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               // frame276gj (129:3418)
-              margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 32*fem),
+              // margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 22*fem),
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,8 +87,7 @@ class DiscardWarning extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          // trashTQo (129:3420)
-                          margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 22*fem, 2*fem),
+                          margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 5*fem, 2*fem),
                           width: 36*fem,
                           height: 39*fem,
                           child: Image.asset(
@@ -135,6 +135,8 @@ class DiscardWarning extends StatelessWidget {
                 ],
               ),
             ),
+            // Spacer will force the next Widget to occupy the bottom of the screen
+            const Spacer(),
             Container(
               // frame11BNj (129:3433)
               margin: EdgeInsets.fromLTRB(30*fem, 0*fem, 30*fem, 0*fem),
@@ -142,38 +144,35 @@ class DiscardWarning extends StatelessWidget {
               height: 56*fem,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    // largebuttonsWT (129:3426)
-                    margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 19*fem, 0*fem),
-                    child: TextButton(
-                      onPressed: () {discardReplyFunction(false);},
-                      style: TextButton.styleFrom (
-                        padding: EdgeInsets.zero,
+                  TextButton(
+                    onPressed: () {discardReplyFunction(false);},
+                    style: TextButton.styleFrom (
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Container(
+                      // padding: EdgeInsets.fromLTRB(20*fem, 16*fem, 20*fem, 16*fem),
+                      width: 100*fem,
+                      height: double.infinity,
+                      decoration: BoxDecoration (
+                        border: Border.all(color: const Color(0xffdb444a)),
+                        borderRadius: BorderRadius.circular(32*fem),
                       ),
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(20*fem, 16*fem, 20*fem, 16*fem),
-                        width: 100*fem,
+                      child: SizedBox(
+                        // autogroupxynw4qq (R58sjSiGtqY1bXwuD3xYNw)
+                        width: double.infinity,
                         height: double.infinity,
-                        decoration: BoxDecoration (
-                          border: Border.all(color: const Color(0xffdb444a)),
-                          borderRadius: BorderRadius.circular(32*fem),
-                        ),
-                        child: SizedBox(
-                          // autogroupxynw4qq (R58sjSiGtqY1bXwuD3xYNw)
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: Center(
-                            child: Text(
-                              'Cancel',
-                              style: SafeGoogleFont (
-                                'Roboto',
-                                fontSize: 18*ffem,
-                                fontWeight: FontWeight.w600,
-                                height: 1.3333333333*ffem/fem,
-                                letterSpacing: 0.54*fem,
-                                color: const Color(0xffdb444a),
-                              ),
+                        child: Center(
+                          child: Text(
+                            'Return',
+                            style: SafeGoogleFont (
+                              'Roboto',
+                              fontSize: 18*ffem,
+                              fontWeight: FontWeight.w600,
+                              height: 1.3333333333*ffem/fem,
+                              letterSpacing: 0.54*fem,
+                              color: const Color(0xffdb444a),
                             ),
                           ),
                         ),
@@ -187,7 +186,7 @@ class DiscardWarning extends StatelessWidget {
                       padding: EdgeInsets.zero,
                     ),
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(24*fem, 16*fem, 18*fem, 16*fem),
+                      // padding: EdgeInsets.fromLTRB(24*fem, 16*fem, 18*fem, 16*fem),
                       width: 97*fem,
                       height: double.infinity,
                       decoration: BoxDecoration (

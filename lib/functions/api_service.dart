@@ -4,7 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'dart:io';
 
 class ApiService {
-  final String baseUrl = 'http://10.0.2.2:8080';
+  final String baseUrl = 'http://192.168.0.37:8080';
 
   Future<String> getDeviceId() async {
     bool isTest = false;
