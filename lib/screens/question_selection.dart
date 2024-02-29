@@ -63,74 +63,22 @@ class Question extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            // frame11h5 (I113:850;113:792)
-            width: double.infinity,
-            height: 32 * fem,
-            child: Stack(
-              children: [
-                Positioned(
-                  // frame275Ty (I113:850;113:794)
-                  left: 107 * fem,
-                  top: 0 * fem,
-                  child: SizedBox(
-                    width: 224 * fem,
-                    height: 24 * fem,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          // softwareengineer9Cw (I113:850;113:795)
-                          left: 0 * fem,
-                          top: 4 * fem,
-                          child: Align(
-                            child: SizedBox(
-                              width: 136 * fem,
-                              height: 16 * fem,
-                              child: Text(
-                                '$role',
-                                textAlign: TextAlign.right,
-                                style: SafeGoogleFont(
-                                  'Roboto',
-                                  fontSize: 16 * ffem,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1 * ffem / fem,
-                                  letterSpacing: 0.8 * fem,
-                                  color: const Color(0xff516177),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          // googlekCj (I113:850;113:796)
-                          left: 135 * fem,
-                          top: 0 * fem,
-                          child: Align(
-                            child: SizedBox(
-                              width: 89 * fem,
-                              height: 24 * fem,
-                              child: Text(
-                                '($company)',
-                                textAlign: TextAlign.center,
-                                style: SafeGoogleFont(
-                                  'Roboto',
-                                  fontSize: 16 * ffem,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.5 * ffem / fem,
-                                  letterSpacing: 0.8 * fem,
-                                  color: const Color(0xff516177),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                '$role ($company)',
+                style: SafeGoogleFont(
+                  'Roboto',
+                  fontSize: 16 * ffem,
+                  fontWeight: FontWeight.w500,
+                  height: 1 * ffem / fem,
+                  letterSpacing: 0.8 * fem,
+                  color: const Color(0xff516177),
                 ),
-              ],
-            ),
-          ),
+              ),
+            ]
+          )
         ],
       ),
     );
