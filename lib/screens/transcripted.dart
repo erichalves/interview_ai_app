@@ -4,6 +4,7 @@ import 'package:myapp/screens/logo_widget.dart';
 import 'package:myapp/screens/submissions_widget.dart';
 import 'package:myapp/screens/answer_results.dart';
 import 'package:myapp/functions/api_service.dart';
+import 'package:myapp/screens/field_w_counter.dart';
 
 class TranscriptedScene extends StatefulWidget {
   final String transcriptedAudio;
@@ -34,7 +35,9 @@ class TranscriptedScene extends StatefulWidget {
       );
 }
 
-class _TranscriptedScene extends State<TranscriptedScene> {
+enum TranscriptionState { editing, analyzing }
+
+class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderStateMixin{
   String transcriptedAudio;
   int countFreeSubmissions;
   String question;
@@ -43,6 +46,8 @@ class _TranscriptedScene extends State<TranscriptedScene> {
   String company;
   ApiService apiService = ApiService();
   late TextEditingController _textController;
+  TranscriptionState transcriptionState = TranscriptionState.editing;
+  late AnimationController _controller;
 
   _TranscriptedScene({
     required this.transcriptedAudio,
@@ -62,10 +67,37 @@ class _TranscriptedScene extends State<TranscriptedScene> {
   @override
   void dispose() {
     _textController.dispose();
+    try {
+      _controller.dispose(); // Controller already defined, moving on...
+    } catch (e) {
+      // Do nothing
+    }
     super.dispose();
   }
 
   void submitAnswer(BuildContext context) {
+    setState(() {
+      transcriptionState = TranscriptionState.analyzing;
+    });
+    try {
+      _controller.dispose(); // Controller already defined, moving on...
+    } catch (e) {
+      // Do nothing
+    }
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2), // Duration for a complete spin
+      vsync: this,
+    )
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          if (transcriptionState == TranscriptionState.analyzing) {
+            _controller.forward(from: 0.0); 
+            // Restart the animation from the beginning
+          }
+        }
+      })
+      ..forward();
+
     apiService.submitTranscription(questionId, question, _textController.text).then((value) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -81,6 +113,22 @@ class _TranscriptedScene extends State<TranscriptedScene> {
           ),
         )
       );
+    }).catchError((error) {
+      // Update global variable with error message
+      String globalErrorMessage = error.toString();
+
+      // Display the error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(globalErrorMessage),
+          backgroundColor: Colors.red,
+        ),
+      );
+
+      setState(() {
+        transcriptionState = TranscriptionState.editing;
+      });
+      _controller.dispose();
     });
   }
 
@@ -144,9 +192,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                 height: 16 * fem,
                               ),
                               Container(
-                                // questiontitleU9h (135:3557)
                                 width: double.infinity,
-                                height: 112 * fem,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: const Color(0xfff0f0f0)),
                                   color: const Color(0x7ffdfdfd),
@@ -187,7 +233,7 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                           0 * fem, 0 * fem, 16 * fem),
                                       width: double.infinity,
                                       constraints: BoxConstraints(
-                                        maxWidth: 324 * fem,
+                                        maxWidth: 350 * fem,
                                       ),
                                       child: Text(
                                         '“$question”',
@@ -230,238 +276,77 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      // frame31K7h (135:3564)
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            // frame29DTy (135:3565)
-                                            margin: EdgeInsets.fromLTRB(0 * fem,
-                                                0 * fem, 0 * fem, 8 * fem),
-                                            padding: EdgeInsets.fromLTRB(
-                                                8 * fem,
-                                                8 * fem,
-                                                4 * fem,
-                                                0 * fem),
-                                            width: double.infinity,
-                                            height: 286 * fem,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: const Color(0xff3a64f6)),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      8 * fem),
-                                            ),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 3 * fem, 0 * fem),
-                                                  constraints: BoxConstraints(
-                                                    maxWidth: 327 * fem,
-                                                  ),
-                                                  child: TextField(
-                                                    controller: _textController,
-                                                    style: SafeGoogleFont(
-                                                      'Roboto',
-                                                      fontSize: 16 * ffem,
-                                                      fontWeight: FontWeight.w400,
-                                                      height: 1.5 * ffem / fem,
-                                                      letterSpacing: 0.8 * fem,
-                                                      color: const Color(0xff171d25),
-                                                    ),
-                                                    decoration: const InputDecoration(
-                                                      border: InputBorder.none,
-                                                      hintText: 'Enter text', // Optionally, provide a hint.
-                                                    ),
-                                                    maxLines: null, // Set to null to allow multi-line input.
-                                                  ),
-                                                ),
-                                                Container(
-                                                  // frame1waK (135:3567)
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0 * fem,
-                                                      4 * fem,
-                                                      0 * fem,
-                                                      4 * fem),
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      2 * fem,
-                                                      0 * fem,
-                                                      2.5 * fem,
-                                                      2.5 * fem),
-                                                  height: double.infinity,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(
-                                                        // notchesn59 (135:3569)
-                                                        width: 11.5 * fem,
-                                                        height: 11.5 * fem,
-                                                        // child: Image.asset(
-                                                        //   'REPLACE_IMAGE:135:3569',
-                                                        //   width: 11.5 * fem,
-                                                        //   height: 11.5 * fem,
-                                                        // ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            // frame1GFD (135:3570)
-                                            width: double.infinity,
-                                            height: 32 * fem,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  // smallbuttonyQX (135:3571)
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0 * fem,
-                                                      0 * fem,
-                                                      121 * fem,
-                                                      0 * fem),
-                                                  width: 178 * fem,
-                                                  height: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            32 * fem),
-                                                  ),
-                                                  child: Container(
-                                                    // autogroupaqep4Ry (R583KFZ6TbTgeJpVPFaQEP)
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0 * fem,
-                                                        0 * fem,
-                                                        56 * fem,
-                                                        1.5 * fem),
-                                                    width: 122 * fem,
-                                                    height: 30.5 * fem,
-                                                    child: Text(
-                                                      'Undo changes',
-                                                      style: SafeGoogleFont(
-                                                        'Roboto',
-                                                        fontSize: 18 * ffem,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        height: 1.3333333333 *
-                                                            ffem /
-                                                            fem,
-                                                        letterSpacing:
-                                                            0.54 * fem,
-                                                        color:
-                                                            const Color(0xff3a64f6),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  // 2n7 (135:3572)
-                                                  '2678/5500',
-                                                  textAlign: TextAlign.center,
-                                                  style: SafeGoogleFont(
-                                                    'Roboto',
-                                                    fontSize: 12 * ffem,
-                                                    fontWeight: FontWeight.w400,
-                                                    height: 1 * ffem / fem,
-                                                    color: const Color(0xff516177),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    FiedWithCounter(maxLength: 5500, textController: _textController,),
                                   ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Container(
-                          // frame28aF (135:3592)
-                          margin: EdgeInsets.fromLTRB(
-                              14 * fem, 0 * fem, 14 * fem, 0 * fem),
+                        transcriptionState == TranscriptionState.editing ? SizedBox(
                           width: double.infinity,
                           height: 56 * fem,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                // largebutton1e3 (135:3593)
-                                margin: EdgeInsets.fromLTRB(
-                                    0 * fem, 0 * fem, 16 * fem, 0 * fem),
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(false); // This will return to the previous screen
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(false); // This will return to the previous screen
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                ),
+                                child: Container(
+                                  height: double.infinity,
+                                  width: 180 * fem,
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: const Color(0xff3a64f6)),
+                                    borderRadius:
+                                        BorderRadius.circular(32 * fem),
                                   ),
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(25.5 * fem,
-                                        16 * fem, 11 * fem, 16 * fem),
-                                    height: double.infinity,
-                                    decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: const Color(0xff3a64f6)),
-                                      borderRadius:
-                                          BorderRadius.circular(32 * fem),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          // arrowcounterclockwisezF5 (I135:3593;50:891)
-                                          margin: EdgeInsets.fromLTRB(0 * fem,
-                                              0 * fem, 11 * fem, 0 * fem),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        // arrowcounterclockwisezF5 (I135:3593;50:891)
+                                        margin: EdgeInsets.fromLTRB(14 * fem,
+                                            0 * fem, 11 * fem, 0 * fem),
+                                        width: 19.5 * fem,
+                                        height: 18 * fem,
+                                        child: Image.asset(
+                                          'assets/screens/images/ArrowCounterClockwise.png',
                                           width: 19.5 * fem,
                                           height: 18 * fem,
-                                          child: Image.asset(
-                                            'assets/screens/images/ArrowCounterClockwise.png',
-                                            width: 19.5 * fem,
-                                            height: 18 * fem,
-                                          ),
                                         ),
-                                        Text(
-                                          // button3z3 (I135:3593;50:879)
-                                          'Record again',
-                                          style: SafeGoogleFont(
-                                            'Roboto',
-                                            fontSize: 18 * ffem,
-                                            fontWeight: FontWeight.w600,
-                                            height: 1.3333333333 * ffem / fem,
-                                            letterSpacing: 0.54 * fem,
-                                            color: const Color(0xff3a64f6),
-                                          ),
+                                      ),
+                                      Text(
+                                        // button3z3 (I135:3593;50:879)
+                                        'Record again',
+                                        style: SafeGoogleFont(
+                                          'Roboto',
+                                          fontSize: 18 * ffem,
+                                          fontWeight: FontWeight.w600,
+                                          height: 1.3333333333 * ffem / fem,
+                                          letterSpacing: 0.54 * fem,
+                                          color: const Color(0xff3a64f6),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                               TextButton(
-                                // largebuttonwpX (135:3594)
                                 onPressed: () => submitAnswer(context),
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.fromLTRB(24.75 * fem,
-                                      16 * fem, 17 * fem, 16 * fem),
                                   height: double.infinity,
+                                  width: 140 * fem,
                                   decoration: BoxDecoration(
                                     color: const Color(0xff3a64f6),
                                     borderRadius:
@@ -472,9 +357,8 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Container(
-                                        // paperplanetiltmHm (I135:3594;50:889)
-                                        margin: EdgeInsets.fromLTRB(0 * fem,
-                                            1.5 * fem, 10.26 * fem, 0 * fem),
+                                        margin: EdgeInsets.fromLTRB(18 * fem,
+                                            1.5 * fem, 10 * fem, 0 * fem),
                                         width: 21 * fem,
                                         height: 21 * fem,
                                         child: Image.asset(
@@ -501,7 +385,56 @@ class _TranscriptedScene extends State<TranscriptedScene> {
                               ),
                             ],
                           ),
-                        ),
+                        ) :
+                        Container(
+                          // largebuttonHas (68:303)
+                          margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 8 * fem),
+                          padding: EdgeInsets.fromLTRB(16 * fem, 16 * fem, 10 * fem, 16 * fem),
+                          width: 200 * fem,
+                          height: 56 * fem,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffd0d4d9),
+                            borderRadius: BorderRadius.circular(32 * fem),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                  // circlenotchuMM (I68:303;50:902)
+                                  margin: EdgeInsets.fromLTRB(4 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                  width: 19.5 * fem * 1.3,
+                                  height: 18.75 * fem * 1.3,
+                                  child: AnimatedBuilder(
+                                      animation: _controller,
+                                      builder: (BuildContext context, Widget? child) {
+                                        return Transform.rotate(
+                                            angle: _controller.value * 2 * 3.14159,
+                                            child: Image.asset(
+                                                'assets/screens/images/CircleNotch.png',
+                                                width: 19.5 * fem * 1.3,
+                                                height: 18.75 * fem * 1.3));
+                                      })),
+                              SizedBox(
+                                // autogroupyzlsMz3 (R58nU1esJ7XkscbzvnYzLs)
+                                width: 130 * fem,
+                                height: double.infinity,
+                                child: Center(
+                                  child: Text(
+                                    'Analyzing',
+                                    style: SafeGoogleFont(
+                                      'Roboto',
+                                      fontSize: 18 * ffem,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.3333333333 * ffem / fem,
+                                      letterSpacing: 0.54 * fem,
+                                      color: const Color(0xff516177),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),

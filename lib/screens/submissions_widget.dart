@@ -61,7 +61,7 @@ class Submissions extends StatelessWidget {
                 padding:
                     EdgeInsets.fromLTRB(8 * fem, 8 * fem, 8 * fem, 8 * fem),
                 width: 150 * fem,
-                height: 40 * fem,
+                height: 45 * fem,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   border: Border.all(color: const Color(0xff0f993f)),

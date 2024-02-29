@@ -250,9 +250,8 @@ class AnswerResults extends StatelessWidget {
                       padding: EdgeInsets.zero,
                     ),
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(24*fem, 16*fem, 11*fem, 16*fem),
-                      width: 155*fem,
-                      height: 56*fem,
+                      width: 175*fem,
+                      height: 55*fem,
                       decoration: BoxDecoration (
                         color: const Color(0xff3a64f6),
                         borderRadius: BorderRadius.circular(32*fem),

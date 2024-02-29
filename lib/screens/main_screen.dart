@@ -165,7 +165,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     );
   }
 
-  void _endTranscriptionWithError(String error) {
+  void _endTranscriptionWithError(Exception error) {
     // Update global variable with error message
     String globalErrorMessage = error.toString();
 
@@ -299,36 +299,24 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
         ),
-        child: SizedBox(
-          width: double.infinity,
+        child: Container(
           height: 56 * fem,
-          child: Container(
-            // largebuttonLKu (113:495)
-            padding:
-                EdgeInsets.fromLTRB(28.5 * fem, 16 * fem, 14 * fem, 16 * fem),
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 228, 228, 228),
-              border: Border.all(color: const Color(0xff0f993f)),
-              borderRadius: BorderRadius.circular(32 * fem),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  // buttonGcs (I113:495;50:879)
-                  'Upgrade !',
-                  style: SafeGoogleFont(
-                    'Roboto',
-                    fontSize: 18 * ffem,
-                    fontWeight: FontWeight.w600,
-                    height: 1.3333333333 * ffem / fem,
-                    letterSpacing: 0.54 * fem,
-                    color: const Color(0xff0f993f),
-                  ),
-                ),
-              ],
+          width: 160 * fem,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 228, 228, 228),
+            border: Border.all(color: const Color(0xff0f993f)),
+            borderRadius: BorderRadius.circular(32 * fem),
+          ),
+          child: Text(
+            'Upgrade !',
+            style: SafeGoogleFont(
+              'Roboto',
+              fontSize: 18 * ffem,
+              fontWeight: FontWeight.w600,
+              height: 1.3333333333 * ffem / fem,
+              letterSpacing: 0.54 * fem,
+              color: const Color(0xff0f993f),
             ),
           ),
         ),
@@ -800,6 +788,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                                                 16 * fem),
                                             child: Text(
                                               '$jobPosition at $company',
+                                              textAlign: TextAlign.center, 
                                               // textAlign: TextAlign.center,
                                               style: SafeGoogleFont(
                                                 'Roboto',

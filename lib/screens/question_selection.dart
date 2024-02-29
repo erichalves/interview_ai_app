@@ -183,10 +183,10 @@ class FreemiumWarning extends StatelessWidget {
           ),
           Positioned(
             left: 53 * fem,
-            top: 530 * fem,
+            top: 520 * fem,
             child: SizedBox(
-              width: 284 * fem,
-              height: 156 * fem,
+              width: 290 * fem,
+              height: 180 * fem,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -213,7 +213,7 @@ class FreemiumWarning extends StatelessWidget {
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(
-                        40 * fem, 0 * fem, 40 * fem, 0 * fem),
+                        40 * fem, 0 * fem, 30 * fem, 0 * fem),
                     child: TextButton(
                       onPressed: () {
                         Navigator.of(context).push(
