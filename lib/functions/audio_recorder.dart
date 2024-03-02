@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:wakelock/wakelock.dart';
 
 class RecordingManager {
   late FlutterSoundRecorder _recorder;
@@ -28,6 +29,7 @@ class RecordingManager {
   }
 
   Future<void> startRecording() async {
+    Wakelock.enable();
     await requestRecordPermission();
     await _initializeRecorder();
     _path = await _getTemporaryPath();
@@ -38,15 +40,18 @@ class RecordingManager {
   }
 
   Future<void> stopRecording() async {
+    Wakelock.disable();
     await _recorder.stopRecorder();
     await _recorder.closeRecorder();
   }
 
   Future<void> pauseRecording() async {
+    Wakelock.disable();
     await _recorder.pauseRecorder();
   }
 
   Future<void> resumeRecording() async {
+    Wakelock.enable();
     await _recorder.resumeRecorder();
   }
 

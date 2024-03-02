@@ -48,6 +48,7 @@ dependencies:
 
   # Path generator
   path_provider: ^2.0.5
+  wakelock: ^0.6.2
 
   # Logging
   logging: ^1.0.0
