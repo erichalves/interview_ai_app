@@ -9,25 +9,32 @@ import 'package:myapp/screens/field_w_counter.dart';
 class TranscriptedScene extends StatefulWidget {
   final String transcriptedAudio;
   final int countFreeSubmissions;
+  final int limitSubmissions;
+  final bool isPremiumUser;
   final String question;
   final int questionId;
   final String jobPosition;
   final String company;
 
-  TranscriptedScene({
+  const TranscriptedScene({
+    Key? key,
     required this.transcriptedAudio,
     required this.countFreeSubmissions,
+    required this.limitSubmissions,
+    required this.isPremiumUser,
     required this.question,
     required this.questionId,
     required this.jobPosition,
     required this.company,
-  });
+  }):super(key: key);
 
   @override
   _TranscriptedScene createState() =>
       _TranscriptedScene(
         transcriptedAudio: transcriptedAudio,
         countFreeSubmissions: countFreeSubmissions,
+        limitSubmissions: limitSubmissions,
+        isPremiumUser: isPremiumUser,
         question: question,
         questionId: questionId,
         jobPosition: jobPosition,
@@ -40,6 +47,8 @@ enum TranscriptionState { editing, analyzing }
 class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderStateMixin{
   String transcriptedAudio;
   int countFreeSubmissions;
+  int limitSubmissions;
+  bool isPremiumUser;
   String question;
   int questionId;
   String jobPosition;
@@ -52,6 +61,8 @@ class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderSta
   _TranscriptedScene({
     required this.transcriptedAudio,
     required this.countFreeSubmissions,
+    required this.limitSubmissions,
+    required this.isPremiumUser,
     required this.question,
     required this.questionId,
     required this.jobPosition,
@@ -73,6 +84,32 @@ class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderSta
       // Do nothing
     }
     super.dispose();
+  }
+
+  void updateUserStatus() {
+    apiService.isUserPremium().then((value) {
+      isPremiumUser = value;
+      if (isPremiumUser) {
+        limitSubmissions = 20;
+      } else {
+        limitSubmissions = 3;
+      }
+    }).catchError((error) {
+      final snackBar = SnackBar(
+        content: Text('Error obtaining user status: $error'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+    apiService.getUsedQuestionsCount().then((value) {
+      if(value != countFreeSubmissions) {
+        setState(() {
+          countFreeSubmissions = value;
+        });
+      }
+    }).catchError((error) {
+      countFreeSubmissions = limitSubmissions;
+    });
   }
 
   void submitAnswer(BuildContext context) {
@@ -107,12 +144,13 @@ class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderSta
                 child: AnswerResults(
                   evaluationText: value,
                   countFreeSubmissions: countFreeSubmissions,
+                  limitSubmissions: limitSubmissions,
                 ),
               ),
             ),
           ),
         )
-      );
+      ).then((value) => updateUserStatus());
     }).catchError((error) {
       // Update global variable with error message
       String globalErrorMessage = error.toString();
@@ -162,6 +200,8 @@ class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderSta
                     fem: fem,
                     ffem: ffem,
                     countFreeSubmissions: countFreeSubmissions,
+                    limitSubmissions: limitSubmissions,
+                    updateUserStatus: updateUserStatus,
                   ),
                   SizedBox(
                     // frame2Bns (135:3554)

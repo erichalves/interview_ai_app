@@ -63,7 +63,11 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
     apiService.getUsedQuestionsCount().then((value) {
-      _countFreeSubmissions = value;
+      if(value != _countFreeSubmissions) {
+        setState(() {
+          _countFreeSubmissions = value;
+        });
+      }
     }).catchError((error) {
       _countFreeSubmissions = _litmitFreeSubmissions;
     });
@@ -104,6 +108,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
           ),
         ).then(
           (value) {
+            updateUserStatus();
             if (value!=null) {
               setState(() {
                 questionId = value["questionId"];
@@ -192,6 +197,8 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
               child: TranscriptedScene(
                 transcriptedAudio: transcriptedAudio,
                 countFreeSubmissions: _countFreeSubmissions,
+                limitSubmissions: _litmitFreeSubmissions,
+                isPremiumUser: _isPremiumUser,
                 question: question,
                 questionId: questionId,
                 jobPosition: jobPosition,
@@ -203,6 +210,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
       ),
     ).then(
       (newQuestionFlag) {
+        updateUserStatus();
         if(newQuestionFlag) {
           _recordingState = RecordingState.standBy;
           questionId += 1;
@@ -294,7 +302,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                 ),
               ),
             ),
-          );
+          ).then((value) => updateUserStatus());
         },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -737,6 +745,8 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                         fem: fem,
                         ffem: ffem,
                         countFreeSubmissions: _countFreeSubmissions,
+                        limitSubmissions: _litmitFreeSubmissions,
+                        updateUserStatus: updateUserStatus,
                       ),
                       Container(
                         // frame14LRR (51:291)

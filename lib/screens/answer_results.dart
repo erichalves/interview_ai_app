@@ -140,8 +140,14 @@ class Result extends StatelessWidget {
 class AnswerResults extends StatelessWidget {
   final String evaluationText;
   final int countFreeSubmissions;
+  final int limitSubmissions;
 
-  const AnswerResults({Key? key, required this.evaluationText, required this.countFreeSubmissions}): super(key: key);
+  const AnswerResults({
+    Key? key,
+    required this.evaluationText,
+    required this.countFreeSubmissions,
+    required this.limitSubmissions,
+  }): super(key: key);
 
   List<Widget> genResultsList(List<Map<String, dynamic>> evaluation, double baseWidth, double fem, double ffem) {
     List<Widget> result = [];
@@ -204,6 +210,7 @@ class AnswerResults extends StatelessWidget {
                     fem: fem,
                     ffem: ffem,
                     countFreeSubmissions: countFreeSubmissions,
+                    limitSubmissions: limitSubmissions,
                   ),
                   Container(
                     // frame32Dvs (93:1115)

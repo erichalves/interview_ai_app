@@ -7,13 +7,17 @@ class Submissions extends StatelessWidget {
   final double fem;
   final double ffem;
   final int countFreeSubmissions;
+  final int limitSubmissions;
+  final Function()? updateUserStatus;
 
   const Submissions(
       {Key? key,
       required this.baseWidth,
       required this.fem,
       required this.ffem,
-      required this.countFreeSubmissions})
+      required this.countFreeSubmissions,
+      required this.limitSubmissions,
+      this.updateUserStatus})
       : super(key: key);
 
   @override
@@ -27,7 +31,7 @@ class Submissions extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Free submissions: $countFreeSubmissions/3',
+              'Free submissions: $countFreeSubmissions/$limitSubmissions',
               style: SafeGoogleFont(
                 'Roboto',
                 fontSize: 16 * ffem,
@@ -52,7 +56,9 @@ class Submissions extends StatelessWidget {
                       ),
                     ),
                   ),
-                );
+                ).then((value) {
+                  updateUserStatus?.call();
+                });
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,

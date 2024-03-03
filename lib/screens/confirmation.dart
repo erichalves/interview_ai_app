@@ -71,7 +71,7 @@ class DiscardWarning extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               // frame276gj (129:3418)
               // margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 22*fem),
               width: double.infinity,
