@@ -150,7 +150,11 @@ class _TranscriptedScene extends State<TranscriptedScene> with TickerProviderSta
             ),
           ),
         )
-      ).then((value) => updateUserStatus());
+      ).then((value) {
+        if (value==null) {
+          updateUserStatus();
+        }
+      });
     }).catchError((error) {
       // Update global variable with error message
       String globalErrorMessage = error.toString();

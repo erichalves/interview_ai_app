@@ -250,7 +250,7 @@ class AnswerResults extends StatelessWidget {
                   TextButton(
                     // largebuttonr5q (93:617)
                     onPressed: () {
-                      Navigator.of(context).pop(null);
+                      Navigator.of(context).pop(true);
                       Navigator.of(context).pop(true);
                     },
                     style: TextButton.styleFrom (
