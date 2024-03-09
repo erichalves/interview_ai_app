@@ -63,22 +63,18 @@ class Question extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                '$role ($company)',
-                style: SafeGoogleFont(
-                  'Roboto',
-                  fontSize: 16 * ffem,
-                  fontWeight: FontWeight.w500,
-                  height: 1 * ffem / fem,
-                  letterSpacing: 0.8 * fem,
-                  color: const Color(0xff516177),
-                ),
-              ),
-            ]
-          )
+          Text(
+            '$role ($company)',
+            textAlign: TextAlign.center,
+            style: SafeGoogleFont(
+              'Roboto',
+              fontSize: 16 * ffem,
+              fontWeight: FontWeight.w500,
+              height: 1 * ffem / fem,
+              letterSpacing: 0.8 * fem,
+              color: const Color(0xff516177),
+            ),
+          ),
         ],
       ),
     );
