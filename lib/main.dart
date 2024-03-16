@@ -16,7 +16,7 @@ void main() {
 
 class InterviewAI extends StatelessWidget {
 
-  const InterviewAI({Key? key}): super(key: key);
+  const InterviewAI({super.key});
 
   @override
   Widget build(BuildContext context) {
