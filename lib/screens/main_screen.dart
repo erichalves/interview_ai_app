@@ -756,10 +756,13 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   @override
   Widget build(BuildContext context) {
     double baseWidth = 400;
-    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double fem = screenWidth / baseWidth;
     double ffem = fem * 0.97;
     return SizedBox(
       width: double.infinity,
+      height: screenHeight,
       child: Container(
         // 45y (51:288)
         width: double.infinity,

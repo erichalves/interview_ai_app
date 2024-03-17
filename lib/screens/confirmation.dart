@@ -7,7 +7,7 @@ class BlurredEffect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 390;
+    double baseWidth = 400;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     return Positioned(
       // rectangle2gzP (129:3377)
@@ -44,8 +44,9 @@ class DiscardWarning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 390;
-    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double baseWidth = 400;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fem = screenWidth / baseWidth;
     double ffem = fem * 0.97;
     return Positioned(
       // errormessageKGf (129:3416)

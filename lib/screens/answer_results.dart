@@ -179,8 +179,10 @@ class AnswerResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 390;
-    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double baseWidth = 400;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double fem = screenWidth / baseWidth;
     double ffem = fem * 0.97;
 
     List<Map<String, dynamic>> evaluationList = parseServerEvaluation(evaluationText);
@@ -190,6 +192,7 @@ class AnswerResults extends StatelessWidget {
       child: Container(
         // f5V (93:574)
         width: double.infinity,
+        height: screenHeight,
         decoration: const BoxDecoration (
           color: Color(0xfff8f8f8),
         ),
