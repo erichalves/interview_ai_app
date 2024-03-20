@@ -130,14 +130,17 @@ class ApiService {
   }
 
   Future<List<Map<String, dynamic>>> fetchQuestions({
-    int? questionId,
+    List<int>? questionIds,
     String? question,
     String? company,
     String? jobPosition,
   }) async {
-    Map<String, String> queryParams = {};
+    Map<String, dynamic> queryParams = {};
 
-    if (questionId != null) queryParams['question_id'] = questionId.toString();
+    // Handling list of question_ids
+    if (questionIds != null && questionIds.isNotEmpty) {
+      queryParams['question_ids'] = questionIds.map((id) => id.toString()).join(',');
+    }
     if (question != null) queryParams['question'] = question;
     if (company != null) queryParams['company'] = company;
     if (jobPosition != null) queryParams['job_position'] = jobPosition;
@@ -151,14 +154,34 @@ class ApiService {
       uri = Uri.https(url[1], '/get-questions', queryParams);
     }
 
-    final response =
-        await http.get(uri, headers: {'Content-Type': 'application/json'});
+    final response = await http.get(uri, headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       return jsonResponse.map((data) => data as Map<String, dynamic>).toList();
     } else {
-      throw Exception('Failure with status code ${response.statusCode}');
+      throw Exception('Failed to load questions with status code ${response.statusCode}');
+    }
+  }
+
+  Future<int> getAvailableQuestionsCount() async {
+    final userId = await getDeviceId();
+    final Uri uri;
+
+    final url = baseUrl.split('//');
+    if (url[0] == 'http:') {
+      uri = Uri.http(url[1], '/questions-count', {'user_id': userId});
+    } else {
+      uri = Uri.https(url[1], '/questions-count', {'user_id': userId});
+    }
+
+    final response = await http.get(uri, headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return jsonResponse['questions_count'] as int;
+    } else {
+      throw Exception('Failed to load questions count with status code ${response.statusCode}');
     }
   }
 

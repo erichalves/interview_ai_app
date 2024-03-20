@@ -38,7 +38,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
   String company = "Google";
   late AnimationController _controller;
   final int waitLimit = 15;
-  final int sizeFreeQuestionSelection = 10;
+  int sizeQuestionSelection = 10;
   List<Map<String, dynamic>> questionDict = [];
 
   @override
@@ -72,29 +72,31 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     }).catchError((error) {
       _countFreeSubmissions = _litmitFreeSubmissions;
     });
+    apiService.getAvailableQuestionsCount().then((value) {
+      sizeQuestionSelection = value;
+    });
   }
 
   void updateQuestion({bool increment = false}) {
     if (increment) {
-      if (_isPremiumUser  | (questionId < sizeFreeQuestionSelection)) {
+      if (questionId < sizeQuestionSelection - 1) {
         questionId += 1;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Free users have only $sizeFreeQuestionSelection questions available to them"),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (_isPremiumUser == false) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Free users have only $sizeQuestionSelection questions available to them"),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
         questionId = 0;
       }
     }
 
     if (questionDict.isEmpty) {
-      apiService.fetchQuestions().then((value) {
-        questionDict = value;
-      });
       // fetch just the next question to be faster
-      apiService.fetchQuestions(questionId: questionId + 1).then(
+      apiService.fetchQuestions(questionIds: [questionId + 1]).then(
         (value) {
           setState(() {
             question = value[0]["question"].toString();
@@ -129,7 +131,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
                 body: SafeArea(
                   child: QuestionSelection(
                     questionId: questionId,
-                    questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, sizeFreeQuestionSelection),
+                    questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, sizeQuestionSelection),
                     isUserPremium: _isPremiumUser,
                   ),
                 ),
@@ -163,7 +165,7 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
             body: SafeArea(
               child: QuestionSelection(
                 questionId: questionId,
-                questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, sizeFreeQuestionSelection),
+                questionDict: _isPremiumUser ? questionDict : questionDict.sublist(0, sizeQuestionSelection),
                 isUserPremium: _isPremiumUser,
               ),
             ),
