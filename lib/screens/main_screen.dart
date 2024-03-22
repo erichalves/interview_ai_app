@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:interview_ai_app/functions/utils.dart';
 import 'package:interview_ai_app/functions/audio_recorder.dart';
 import 'package:interview_ai_app/functions/api_service.dart';
+import 'package:interview_ai_app/functions/cache.dart';
 import 'package:interview_ai_app/screens/transcripted.dart';
 import 'package:interview_ai_app/screens/question_selection.dart';
 import 'package:interview_ai_app/screens/logo_widget.dart';
@@ -77,7 +78,21 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
     });
   }
 
-  void updateQuestion({bool increment = false}) {
+  void updateQuestion({bool increment = false, bool checkCache = true}) {
+    if (questionDict.isEmpty && checkCache) {
+      loadCache("questions_dict").then(
+        (value) {
+          if (value!=null) {
+            questionDict = value;
+          }
+        }
+      ).whenComplete(() {
+        updateQuestion(increment: increment, checkCache: false);
+      });
+      // Return for now, we will be back once the call to the cached file ends
+      return;
+    }
+
     if (increment) {
       if (questionId < sizeQuestionSelection - 1) {
         questionId += 1;
@@ -93,9 +108,14 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         questionId = 0;
       }
     }
-
-    if (questionDict.isEmpty) {
-      // fetch just the next question to be faster
+    
+    if (questionDict.length <= questionId) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Downloading more questions, wait a bit..."),
+          backgroundColor: Color(0xff3a64f6),
+        ),
+      );
       apiService.fetchQuestions(questionIds: [questionId + 1]).then(
         (value) {
           setState(() {
@@ -111,11 +131,28 @@ class _Scene extends State<Scene> with TickerProviderStateMixin  {
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
-    } else {
+    }
+    else {
       setState(() {
         question = questionDict[questionId]["question"].toString();
         jobPosition = questionDict[questionId]["job_position_full_name"].toString();
         company = questionDict[questionId]["company"].toString();
+      });
+    }
+
+    // We will fetch questions as the user advances
+    if (questionDict.length < questionId + 6 && questionDict.length < sizeQuestionSelection) {
+      apiService.fetchQuestions(questionIds: List.generate(10, (index) => questionDict.length + index + 1)).then(
+        (value) {
+          questionDict.addAll(value);
+          saveCache(questionDict, "questions_dict");
+        },
+      ).catchError((error) {
+        final snackBar = SnackBar(
+          content: Text('Error fetching questions: $error'),
+          backgroundColor: Colors.red,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
     }
   }

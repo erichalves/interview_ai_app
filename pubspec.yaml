@@ -45,7 +45,7 @@ dependencies:
   fuzzywuzzy: ^1.1.6
 
   # Path generator
-  path_provider: ^2.0.5
+  path_provider: ^2.0.11
   wakelock: ^0.6.2
 
   # Logging
