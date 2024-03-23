@@ -94,7 +94,7 @@ String formatTime(int seconds) {
 
 List<Map<String, dynamic>> parseServerEvaluation(String input) {
 
-  final regex = RegExp(r'(?:\d+\) )?(.*?): (\d+(?:\.\d+)?)\/\d+ - (.*)');
+  final regex = RegExp(r'(?:\d+\) )?(.*?): (\d+(?:\.\d+)?)\/\d+[ ]*[-|\.] (.*)');
   final matches = regex.allMatches(input);
 
   List<Map<String, dynamic>> resultList = [];

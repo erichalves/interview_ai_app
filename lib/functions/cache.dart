@@ -12,7 +12,12 @@ Future<void> saveCache(List<Map<String, dynamic>> data, String cacheName) async 
 Future<List<Map<String, dynamic>>?> loadCache(String cacheName) async {
   final directory = await getApplicationDocumentsDirectory();
   final file = File('${directory.path}/$cacheName.json');
-  String json = await file.readAsString();
+  String json = '';
+  try {
+    json = await file.readAsString();
+  } catch (e) {
+    return null;
+  }
   List<dynamic> jsonData = jsonDecode(json);
   return jsonData.cast<Map<String, dynamic>>();
 }

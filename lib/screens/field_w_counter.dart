@@ -30,6 +30,7 @@ class _FiedWithCounter extends State<FiedWithCounter> {
   void initState() {
     super.initState();
     textController.addListener(_updateCharacterCount);
+    _characterCount = textController.text.length;
   }
 
   void _updateCharacterCount() {
