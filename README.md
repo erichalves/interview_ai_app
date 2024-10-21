@@ -1,16 +1,8 @@
-# test
+# Interview AI App
 
-A new Flutter project.
+Project to learn Flutter/DART and App development and to play around with the Open AI's models.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## App Desciption
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Embark on your journey to interview success with Interview AI, a simple yet powerful app that helps you improve your interview skills. Our app offers a unique and interactive way to prepare for the crucial 'fit' interview questions that can determine the success or failure of your application.
